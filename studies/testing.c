@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 17:56:30 by lliberal          #+#    #+#             */
-/*   Updated: 2023/01/25 16:24:54 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/01/30 11:17:18 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ char	*check_spaces_and_numbers(char *argv)
 	{
 		if ((argv[i] >= 9 || argv[i] <= 13) && argv[i] == 32)
 		{
-
+			
 		}
 		if (argv[i] < 48 || argv[i] > 57)
 			return (0);
@@ -252,7 +252,7 @@ int	main(int argc, char *argv[])
 		while (argv[i])
 		{
 			if (!check_spaces_and_numbers(argv[i]))
-				exit(printf("%s\n", "error"));
+				exit(printf("%s\n", "error ha espacos"));
 			content = ft_atoi(argv[i]);
 			insert_end(&root, content);
 			i++;
@@ -265,7 +265,6 @@ int	main(int argc, char *argv[])
 			i++;
 			curr = curr->next;
 		}
-		printf("Estao na linked list: %i\n", i - 1);
 	}
 	deallocate(&root);
 	return (0);

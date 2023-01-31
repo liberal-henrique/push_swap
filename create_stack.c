@@ -6,19 +6,11 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:56:40 by lliberal          #+#    #+#             */
-/*   Updated: 2023/01/25 15:48:25 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/01/30 11:44:18 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./push_swap.h"
-
-//	Aqui vamos receber os numeros:
-//- converte-los em inteiros
-//- checar se sao numeros
-//- se ha espacos demasiados
-//- se ha repetidos --> nesse caso, retornaremos um erro;
-//- verificar se ja esta sorted (return Zero comandos para ordenar)
-
 
 void	insert_end(t_node **root, int value)
 {
@@ -40,4 +32,19 @@ void	insert_end(t_node **root, int value)
 	while (curr->next != NULL)
 		curr = curr->next;
 	curr->next = new_node;
+}
+
+void	deallocate(t_node **root)
+{
+	t_node	*curr;
+	t_node	*temp;
+
+	curr = *root;
+	while (curr->next != NULL)
+	{
+		temp = curr;
+		curr = curr->next;
+		free(temp);
+	}
+	*root = NULL;
 }

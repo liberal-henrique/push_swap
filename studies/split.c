@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:55:36 by lliberal          #+#    #+#             */
-/*   Updated: 2023/01/25 17:28:54 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/01/31 11:30:58 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static char	**split_recursive(char **result, char *str, int cnt_strings, char c)
 	free(keep_parts);
 	return (result);
 }
-//"1 2 3"
+
 char	**ft_split(char const *s, char c)
 {
 	return (split_recursive(0, (char *)s, 0, c));
