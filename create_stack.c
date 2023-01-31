@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:56:40 by lliberal          #+#    #+#             */
-/*   Updated: 2023/01/30 11:44:18 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/01/31 17:57:46 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	insert_end(t_node **root, int value)
 	if (new_node == NULL)
 		return ;
 	new_node->next = NULL;
-	new_node->x = value;
+	new_node->content = value;
 	if (*root == NULL)
 	{
 		*root = new_node;

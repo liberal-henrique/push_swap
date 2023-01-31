@@ -6,31 +6,17 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:55:36 by lliberal          #+#    #+#             */
-/*   Updated: 2023/01/31 12:37:12 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/01/31 18:09:37 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./push_swap.h"
 
-// int	ft_intermedia(char **argv, int delimiter)
-// {
-// 	char	**new_arr;
-// 	int		i;
-// 	int		j;
+//#include "./push_swap.h"
 
-// 	i = 0;
-// 	j = 0;
-// 	new_arr = ft_split(**argv, delimiter);
-// 	while (new_arr[i])
-// 	{
-// 		while (new_arr[i][j])
-// 		{
-// 			if (new_arr[i][j] < 48 || new_arr[i][j] > 57)
-// 				exit (2);
-// 		}
-// 	}
-// 	return (1);
-// }
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
 
 //	Aqui vamos receber os numeros:
 //- converte-los em inteiros
@@ -39,27 +25,22 @@
 //- se ha repetidos --> nesse caso, retornaremos um erro;
 //- verificar se ja esta sorted (return Zero comandos para ordenar)
 
-// if ((argv[i][j] >= 9 || argv[i][j] <= 13) && argv[i][j] == 32)
-// 			{
-// 				flag = ft_intermedia((char *)argv[i], argv[i][j]);
-// 				break ;
-// 			}
-
 // 42 Norminette Highlighter
 
 typedef struct s_node
 {
-	int				x;
+	int				content;
 	struct s_node	*next;
 }					t_node;
 
-int			ft_atoi(const char *str);
+int			ft_atoi_check_numbers(const char *str, t_node *t_list_a);
 void		insert_end(t_node **root, int value);
 void		deallocate(t_node **root);
 static char	**split_rcsv(char **result, char *str, int cnt_strings, char c);
 char		**ft_split(char const *s, char c);
 t_node		*check_spaces(char **argv, t_node *t_list_a);
 t_node		*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter);
+void		printList(t_node *root);
 
 int	main(int argc, char *argv[])
 {
@@ -73,7 +54,26 @@ int	main(int argc, char *argv[])
 	if (argc < 2)
 		return (0);
 	t_list_a = check_spaces(argv + 1, t_list_a);
+	printf("Stack: A "); printList(t_list_a);
 	return (0);
+}
+
+void	printList(t_node *root)
+{
+	t_node	*curr;
+
+	curr = root;
+	while (curr != NULL)
+	{
+		if (curr->next == NULL)
+		{
+			printf("[*][%ld]", (long int)curr->content);
+			break;
+		}
+		printf("[*][%ld]->", (long int)curr->content);
+		curr = curr->next;
+	}
+	write(1, "\n", 1);
 }
 
 void	insert_end(t_node **root, int value)
@@ -86,7 +86,7 @@ void	insert_end(t_node **root, int value)
 	if (new_node == NULL)
 		return ;
 	new_node->next = NULL;
-	new_node->x = value;
+	new_node->content = value;
 	if (*root == NULL)
 	{
 		*root = new_node;
@@ -122,7 +122,6 @@ int	ft_atoi_check_numbers(const char *str, t_node *t_list_a)
 	i = 0;
 	sign = 1;
 	res = 0;
-
 	while (str[i++])
 	{
 		if (str[i] == '-' || str[i] == '+')
@@ -155,12 +154,13 @@ t_node	*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter)
 	i = 0;
 	str_temp = ft_split((char *) argv, delimiter);
 	while (str_temp[i++])
-		insert_end(&t_list_a, ft_atoi_check_numbers((str_temp[i], t_list_a));
-	deallocate(&str_temp);
+		insert_end(&t_list_a, ft_atoi_check_numbers(str_temp[i], t_list_a));
+	while (str_temp[i++])
+		free(str_temp[i]);
 	return (t_list_a);
 }
 
-t_node *check_spaces(char **argv, t_node *t_list_a)
+t_node	*check_spaces(char **argv, t_node *t_list_a)
 {
 	int		i;
 	int		j;
@@ -182,10 +182,11 @@ t_node *check_spaces(char **argv, t_node *t_list_a)
 			}
 		}
 		if (flag == 0)
-			insert_end(&t_list_a, ft_atoi(argv[i], t_list_a));
+			insert_end(&t_list_a, ft_atoi_check_numbers(argv[i], t_list_a));
 	}
 	return (t_list_a);
 }
+
 static char	**split_rcsv(char **result, char *str, int cnt_strings, char c)
 {
 	int		index;

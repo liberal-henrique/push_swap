@@ -6,14 +6,13 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 16:10:04 by lliberal          #+#    #+#             */
-/*   Updated: 2023/01/31 11:59:02 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/01/31 18:00:38 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
-# include <stdarg.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>

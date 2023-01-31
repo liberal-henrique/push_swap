@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:55:36 by lliberal          #+#    #+#             */
-/*   Updated: 2023/01/31 11:30:58 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/01/31 17:49:57 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,10 @@ int	main(void)
 	char str[] = "ab cd e";
 	char **result;
 	int i = 0;
+	int j = 0;
 
 	result = ft_split(str, 32);
-	while (i < 3)
-	{
-		printf("%s", result[i]);
-		i++;
-	}
+	
 
 	printf("\n");
 	free(result);
