@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:55:36 by lliberal          #+#    #+#             */
-/*   Updated: 2023/01/31 17:49:57 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/01 17:36:34 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	**split_recursive(char **result, char *str, int cnt_strings, char c)
 		result = malloc(sizeof(char *) * (cnt_strings + 1));
 	if (result)
 		result[cnt_strings] = keep_parts;
-	free(keep_parts);
+
 	return (result);
 }
 
@@ -47,17 +47,40 @@ char	**ft_split(char const *s, char c)
 	return (split_recursive(0, (char *)s, 0, c));
 }
 
+void	freeAll(char **result)
+{
+	int	i;
+
+	i = 0;
+	while (result[i])
+	{
+		free(result[i]);
+		i++;
+	}
+    free(result);
+}
+
 int	main(void)
 {
-	char str[] = "ab cd e";
+	char str[] = "   Luiz  Henrique  Liberal";
 	char **result;
 	int i = 0;
 	int j = 0;
 
 	result = ft_split(str, 32);
-	
 
-	printf("\n");
-	free(result);
+	while (result[i])
+    {
+        j = 0;
+        while (result[i][j])
+        {
+            printf("%c", result[i][j]);
+            j++;
+        }
+        i++;
+        printf("\n");
+    }
+	freeAll(result);
 	return (0);
 }
+0x602000000058 is located 0 bytes to the right of 8

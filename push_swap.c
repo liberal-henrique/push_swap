@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:55:36 by lliberal          #+#    #+#             */
-/*   Updated: 2023/01/31 18:09:37 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/01 18:05:24 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,11 @@ typedef struct s_node
 int			ft_atoi_check_numbers(const char *str, t_node *t_list_a);
 void		insert_end(t_node **root, int value);
 void		deallocate(t_node **root);
-static char	**split_rcsv(char **result, char *str, int cnt_strings, char c);
+char	write_word(char *dest, const char *from, char set);
+int	word_count(const char *sr, char delimiter);
+void	add_split(char **dst, const char *string, char delimiter);
 char		**ft_split(char const *s, char c);
+void	freeAll(char **result);
 t_node		*check_spaces(char **argv, t_node *t_list_a);
 t_node		*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter);
 void		printList(t_node *root);
@@ -55,6 +58,7 @@ int	main(int argc, char *argv[])
 		return (0);
 	t_list_a = check_spaces(argv + 1, t_list_a);
 	printf("Stack: A "); printList(t_list_a);
+	deallocate(t_list_a);
 	return (0);
 }
 
@@ -73,7 +77,6 @@ void	printList(t_node *root)
 		printf("[*][%ld]->", (long int)curr->content);
 		curr = curr->next;
 	}
-	write(1, "\n", 1);
 }
 
 void	insert_end(t_node **root, int value)
@@ -96,21 +99,22 @@ void	insert_end(t_node **root, int value)
 	while (curr->next != NULL)
 		curr = curr->next;
 	curr->next = new_node;
+
 }
 
-void	deallocate(t_node **root)
+void	deallocate(t_node *root)
 {
 	t_node	*curr;
 	t_node	*temp;
 
-	curr = *root;
+	curr = root;
 	while (curr->next != NULL)
 	{
 		temp = curr;
 		curr = curr->next;
 		free(temp);
 	}
-	*root = NULL;
+	free(root);
 }
 // "+1 +1 -3 -2"
 int	ft_atoi_check_numbers(const char *str, t_node *t_list_a)
@@ -187,35 +191,96 @@ t_node	*check_spaces(char **argv, t_node *t_list_a)
 	return (t_list_a);
 }
 
-static char	**split_rcsv(char **result, char *str, int cnt_strings, char c)
+char	write_word(char *dest, const char *from, char set)
 {
-	int		index;
-	char	*keep_parts;
+	int	i;
 
-	index = 0;
-	keep_parts = NULL;
-	while (*str == c)
-		str++;
-	while (str[index] != c && str[index])
-		index++;
-	if (index > 0)
-		keep_parts = malloc(sizeof(char) * (index + 1));
-	index = 0;
-	while (keep_parts && *str != c && *str)
-		keep_parts[index++] = *str++;
-	if (*str == c)
-		keep_parts[index] = '\0';
-	if (keep_parts)
-		result = split_rcsv(result, str, cnt_strings + 1, c);
-	else
-		result = malloc(sizeof(char *) * (cnt_strings + 1));
-	if (result)
-		result[cnt_strings] = keep_parts;
-	free(keep_parts);
-	return (result);
+	i = 0;
+	while (from[i] != '\0')
+	{
+		if (from[i] != set)
+			dest[i] = from[i];
+		if (from[i] == set)
+			break ;
+		i++;
+	}
+	dest[i] = '\0';
+	return (*dest);
+}
+
+int	word_count(const char *sr, char delimiter)
+{
+	int	j;
+	int	word;
+
+	j = 0;
+	word = 0;
+	while (sr[j])
+	{
+		if (sr[j] != delimiter && ((sr[j + 1] == delimiter) || (sr[j + 1] == '\0')))
+			word++;
+		j++;
+	}
+	return (word);
+}
+
+void	add_split(char **dst, const char *string, char delimiter)
+{
+	int	l;
+	int	j;
+	int	letter;
+
+	l = 0;
+	letter = 0;
+	while (string[l])
+	{
+		if (string[l] == delimiter)
+			l++;
+		else
+		{
+			j = 0;
+			while (string[l + j] != delimiter && string[j + l])
+				j++;
+			dst[letter] = malloc (sizeof(char) * (j + 1));
+			if (!dst[letter])
+				return ;
+			write_word(dst[letter], string + l, delimiter);
+			if (string[j + l] == '\0')
+				break ;
+			l = l + j;
+			letter++;
+		}
+	}
 }
 
 char	**ft_split(char const *s, char c)
 {
-	return (split_rcsv(0, (char *)s, 0, c));
+	char	**res;
+	int		words;
+
+	if (!s)
+		return (NULL);
+	words = word_count(s, c);
+	res = malloc (sizeof(char *) * (words + 1));
+	if (!res)
+		return (NULL);
+	res[words] = NULL;
+	add_split(res, s, c);
+	return (res);
 }
+
+void	freeAll(char **result)
+{
+	int	i;
+
+	i = 0;
+	while (result[i])
+	{
+		free(result[i]);
+		i++;
+	}
+    free(result);
+}
+
+
+//gcc -fsanitize=address count_words.c -g -o split_rec
