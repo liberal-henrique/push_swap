@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:55:36 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/01 18:05:24 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/03 13:26:56 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,6 @@
 # include <string.h>
 # include <unistd.h>
 
-//	Aqui vamos receber os numeros:
-//- converte-los em inteiros
-//- checar se sao numeros
-//- se ha espacos demasiados
-//- se ha repetidos --> nesse caso, retornaremos um erro;
-//- verificar se ja esta sorted (return Zero comandos para ordenar)
 
 // 42 Norminette Highlighter
 
@@ -33,9 +27,9 @@ typedef struct s_node
 	struct s_node	*next;
 }					t_node;
 
-int			ft_atoi_check_numbers(const char *str, t_node *t_list_a);
+int			ft_atoi_check_numbers(const char *str);
 void		insert_end(t_node **root, int value);
-void		deallocate(t_node **root);
+void		deallocate(t_node *root);
 char	write_word(char *dest, const char *from, char set);
 int	word_count(const char *sr, char delimiter);
 void	add_split(char **dst, const char *string, char delimiter);
@@ -60,6 +54,80 @@ int	main(int argc, char *argv[])
 	printf("Stack: A "); printList(t_list_a);
 	deallocate(t_list_a);
 	return (0);
+}
+
+t_node	*check_spaces(char **argv, t_node *t_list_a)
+{
+	int		i;
+	int		j;
+	int		flag;
+	t_node	*new_node;
+
+	i = -1;
+	while (argv[++i])
+	{
+		j = 0;
+		flag = 0;
+		while (argv[i][j++])
+		{
+			if ((argv[i][j] >= 9 && argv[i][j] <= 13) || argv[i][j] == 32)
+			{
+				new_node = ft_split_create_str(new_node, argv[i], argv[i][j]);
+				flag = 1;
+				break;
+			}
+		}
+		if (flag == 0)
+			insert_end(&t_list_a, ft_atoi_check_numbers(argv[i]));
+	}
+	return (t_list_a);
+}
+
+int	ft_atoi_check_numbers(const char *str)
+{
+	int		i;
+	int		sign;
+	long int	res;
+
+	i = 0;
+	sign = 1;
+	res = 0;
+	while (str[i++])
+	{
+		if (str[i] == '-' || str[i] == '+')
+			i++;
+		if (str[i] >= 9 && str[i] <= 0)
+			printf("ERRO NO ATOI");
+	}
+	i = 0;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+			sign *= -1;
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		res = res * 10 + str[i] - '0';
+		if (res > 2147483647 || res < -2147483648)
+			printf("ERRO NO ATOI");
+		i++;
+	}
+	return (res * sign);
+}
+
+t_node	*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter)
+{
+	char	**str_temp;
+	int		i;
+
+	i = 0;
+	str_temp = ft_split((char *) argv, delimiter);
+	while (str_temp[i++])
+		insert_end(&t_list_a, ft_atoi_check_numbers(str_temp[i]));
+	while (str_temp[i++])
+		free(str_temp[i]);
+	return (t_list_a);
 }
 
 void	printList(t_node *root)
@@ -114,82 +182,8 @@ void	deallocate(t_node *root)
 		curr = curr->next;
 		free(temp);
 	}
-	free(root);
 }
-// "+1 +1 -3 -2"
-int	ft_atoi_check_numbers(const char *str, t_node *t_list_a)
-{
-	int		i;
-	int		sign;
-	long	res;
-
-	i = 0;
-	sign = 1;
-	res = 0;
-	while (str[i++])
-	{
-		if (str[i] == '-' || str[i] == '+')
-			i++;
-		if (str[i] >= 9 && str[i] <= 0)
-			deallocate(&t_list_a);
-	}
-	i = 0;
-	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			sign *= -1;
-		i++;
-	}
-	while (str[i] >= '0' && str[i] <= '9')
-	{
-		res = res * 10 + str[i] - '0';
-		if (res > 2147483647 || res < -2147483648)
-			deallocate(&t_list_a);
-		i++;
-	}
-	return (res * sign);
-}
-
-t_node	*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter)
-{
-	char	**str_temp;
-	int		i;
-
-	i = 0;
-	str_temp = ft_split((char *) argv, delimiter);
-	while (str_temp[i++])
-		insert_end(&t_list_a, ft_atoi_check_numbers(str_temp[i], t_list_a));
-	while (str_temp[i++])
-		free(str_temp[i]);
-	return (t_list_a);
-}
-
-t_node	*check_spaces(char **argv, t_node *t_list_a)
-{
-	int		i;
-	int		j;
-	int		flag;
-	t_node	*new_node;
-
-	i = -1;
-	while (argv[++i])
-	{
-		j = 0;
-		flag = 0;
-		while (argv[i][j++])
-		{
-			if ((argv[i][j] >= 9 && argv[i][j] <= 13) || argv[i][j] == 32)
-			{
-				new_node = ft_split_create_str(new_node, argv[i], argv[i][j]);
-				flag = 1;
-				break;
-			}
-		}
-		if (flag == 0)
-			insert_end(&t_list_a, ft_atoi_check_numbers(argv[i], t_list_a));
-	}
-	return (t_list_a);
-}
+// "+1 +1 -3 -2
 
 char	write_word(char *dest, const char *from, char set)
 {

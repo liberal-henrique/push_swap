@@ -1,0 +1,40 @@
+Aqui vamos receber os numeros:
+- converte-los em inteiros
+- checar se sao numeros
+- se ha espacos demasiados
+- se ha repetidos --> nesse caso, retornaremos um erro;
+- verificar se ja esta sorted (return Zero comandos para ordenar)
+
+Examples of possible arguments:
+INT_MAX -> 2147483647
+INT_MIN -> -2147483648
+
+./push_swap "   -1-2" 1 2 3 --> -1, -2, 1, 2, 3
+
+./push_swap "  1 2 3 -" --> erro
+
+./push_swap "-1 -  " --> erro
+
+./push_swap " 1 -a 2" --> erro
+
+./push_swap "    1 " 2 3 --> 1, 2, 3
+
+./push_swap 1 2 3
+
+./push_swap " 1  2  3"
+
+
+"1 2 3 4    4  5 6      6"
+
+
+	Eu nao estou a conseguir receber argumentos do command line e dar
+free a tudo que foi recebido.
+
+
+	Basicamente, estou a conseguir receber os argumentos. Contudo, terei de
+nao colocor a minha split dentro de um loop. Da mesma forma que o Jonathan fez.
+Ele Inicializa a linked_list.
+	Dentro dessa funcao ele usara uma funcao que,
+		caso precise, chamara o split e ja add n linked list os elementos recebidos e dara free no array 2d.
+		caso nao precise, chamara o atoi e add na linked list os valores ja convertidos em int.
+	Por isso, ambas as funcoes deverao receber a linked list, pois deverao preservar possiveis valores ja adicionados anteriormente.

@@ -89,28 +89,69 @@ void	freeAll(char **result)
 		free(result[i]);
 		i++;
 	}
-    free(result);
+	free(result);
 }
 
-int main(void)
+
+int main(int argc, char **argv)
 {
-	char	str[] = "   Luiz  Henrique  Liberal";
 	char	**word;
     int j = 0;
     int i = 0;
+	int	index_argv = 1;
 
-	word = ft_split(str, 32);
+	if (argc < 2)
+	{
+		printf("Erro");
+		return (0);
+	}
+
+	word = ft_split(argv[index_argv], 32);
 	while (word[i])
-    {
-        j = 0;
-        while (word[i][j])
-        {
-            printf("%c", word[i][j]);
-            j++;
-        }
-        i++;
-        printf("\n");
-    }
-	freeAll(word);
+	{
+		printf("%s", word[i]);
+		i++;
+	}
+	i = 0;
+	while (word[i])
+	{
+		free(word[i]);
+		i++;
+	}
+	free(word);
 	return (0);
 }
+
+// char **temp;
+	// int	i;
+	// int *erro;
+	// 	i = -1;
+	// temp = ft_split(av[1], 32);
+	// while(temp[++i])
+	// 	printf("%s", temp[i]);
+	// i = -1;
+	// while (temp[++i])
+	// 	free(temp[i]);
+	// free(temp);
+
+// int	main(void)
+// {
+// 	char	str[] = "Luiz    Henrique Libe    ral    de souzaa      s            h";
+// 	int j = 0;
+// 	int i = 0;
+// 	char **result;
+// 	result = ft_split(str, 32);
+// 	// while (result[i])
+//     // {
+//     //     j = 0;
+//     //     while (result[i][j])
+//     //     {
+//     //         printf("%c", result[i][j]);
+//     //         j++;
+//     //     }
+//     //     i++;
+//     // }
+// 	printf("%c\n", result[2][1]);
+// 	freeAll(result);
+// 	return (0);
+// }
