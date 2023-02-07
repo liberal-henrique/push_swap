@@ -9,32 +9,44 @@ Examples of possible arguments:
 INT_MAX -> 2147483647
 INT_MIN -> -2147483648
 
-./push_swap "   -1-2" 1 2 3 --> -1, -2, 1, 2, 3
+./push_swap "   -1-2" 1 2 3 --> -1, -2, 1, 2, 3  (check)
 
-./push_swap "  1 2 3 -" --> erro
+./push_swap "  1 2 3 -" --> erro (check)
 
-./push_swap "-1 -  " --> erro
+./push_swap "-1 -  " --> erro   (check)
 
-./push_swap " 1 -a 2" --> erro
+./push_swap " 1 -a 2" --> erro (check)
 
-./push_swap "    1 " 2 3 --> 1, 2, 3
+./push_swap "    1 " 2 3 --> 1, 2, 3 (check)
 
-./push_swap 1 2 3
+./push_swap 1 2 3 (check)
 
-./push_swap " 1  2  3"
+./push_swap " 1  2  3" (check)
 
+./push_swap "-8-9" --> -8, -9
+
+gcc -fsanitize=address count_words.c -g -o split_rec
 
 "1 2 3 4    4  5 6      6"
 
-
-	Eu nao estou a conseguir receber argumentos do command line e dar
-free a tudo que foi recebido.
-
-
-	Basicamente, estou a conseguir receber os argumentos. Contudo, terei de
-nao colocor a minha split dentro de um loop. Da mesma forma que o Jonathan fez.
-Ele Inicializa a linked_list.
-	Dentro dessa funcao ele usara uma funcao que,
-		caso precise, chamara o split e ja add n linked list os elementos recebidos e dara free no array 2d.
-		caso nao precise, chamara o atoi e add na linked list os valores ja convertidos em int.
-	Por isso, ambas as funcoes deverao receber a linked list, pois deverao preservar possiveis valores ja adicionados anteriormente.
+dia 07 de fevereiro
+	(0k)--> Consegui fazer meu argumento receber tanto argumentos
+organizados quanto argumentos separados por espacos dentro
+de aspas.
+	(0k)--> Preciso agora evitar que seja adicionado valores repetidos.
+Caso o valor tratado ja esteja na lista deveremos retornar erro.
+Acredito que resolverei isso dentro da minha funcao de insert_end,
+pois vamos percorrer a lista comparando os valores.
+	(0k)--> Preciso fazer meu codigo aceitar valores negativos. Contudo, ao
+criar um documento learning.c o problema nao estava nem no meu atoi nem
+no meu insert_end. Avaliando a situacao percebi que o meu codigo esta
+adicionando de forma repetida os valores negativos. Por isso, ele nao
+consegue adiciona-los.
+	--> preciso aceitar numeros juntos separados apenas por sinais. O problema
+	e a forma como estou a usar meu atoi. Tendo em vista que apenas e impressa
+	uma casa depois do sinal. Portanto, posso criar uma funcao que percorra
+	minha string e faca o que o atoi faz em todos os digitos.
+	--> preciso perceber se a lista ja esta "sorted"
+	--> preciso fazer os movimentos
+	--> preciso comecar a organizar qual sera o algoritmo que usarei
+	midpoint algorithm;
