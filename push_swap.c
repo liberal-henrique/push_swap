@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:55:36 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/03 13:26:56 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/07 15:12:11 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,36 +27,36 @@ typedef struct s_node
 	struct s_node	*next;
 }					t_node;
 
-int			ft_atoi_check_numbers(const char *str);
-void		insert_end(t_node **root, int value);
-void		deallocate(t_node *root);
+int		ft_atoi_check_numbers(const char *str, t_node *t_list_a);
+void	insert_end(t_node **root, int value);
+void	deallocate(t_node **root, int message);
 char	write_word(char *dest, const char *from, char set);
-int	word_count(const char *sr, char delimiter);
+char	**ft_split(char const *s, char c);
+int		word_count(const char *sr, char delimiter);
 void	add_split(char **dst, const char *string, char delimiter);
-char		**ft_split(char const *s, char c);
 void	freeAll(char **result);
-t_node		*check_spaces(char **argv, t_node *t_list_a);
-t_node		*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter);
-void		printList(t_node *root);
+t_node	*initialize_list_link(char **argv, t_node *t_list_a);
+void	print_array_2d(char **arr_bidimensional);
+t_node	*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter);
+void	printList(t_node *root);
 
-int	main(int argc, char *argv[])
+int	main(int argc, char **argv)
 {
 	t_node	*t_list_a;
-	t_node	*curr;
 	int		i;
 
 	i = 1;
 	t_list_a = NULL;
-	curr = t_list_a;
 	if (argc < 2)
 		return (0);
-	t_list_a = check_spaces(argv + 1, t_list_a);
-	printf("Stack: A "); printList(t_list_a);
-	deallocate(t_list_a);
+	t_list_a = initialize_list_link(argv + 1, t_list_a);
+	printf("Stack A :");
+	printList(t_list_a);
+	deallocate(&t_list_a, 0);
 	return (0);
 }
 
-t_node	*check_spaces(char **argv, t_node *t_list_a)
+t_node	*initialize_list_link(char **argv, t_node *t_list_a)
 {
 	int		i;
 	int		j;
@@ -64,6 +64,7 @@ t_node	*check_spaces(char **argv, t_node *t_list_a)
 	t_node	*new_node;
 
 	i = -1;
+	new_node = NULL;
 	while (argv[++i])
 	{
 		j = 0;
@@ -72,18 +73,32 @@ t_node	*check_spaces(char **argv, t_node *t_list_a)
 		{
 			if ((argv[i][j] >= 9 && argv[i][j] <= 13) || argv[i][j] == 32)
 			{
-				new_node = ft_split_create_str(new_node, argv[i], argv[i][j]);
 				flag = 1;
-				break;
+				new_node = ft_split_create_str(new_node, argv[i], argv[i][j]);
+				break ;
 			}
+			if (flag == 0)
+				insert_end(&new_node, ft_atoi_check_numbers(argv[i], t_list_a));
 		}
-		if (flag == 0)
-			insert_end(&t_list_a, ft_atoi_check_numbers(argv[i]));
 	}
+	return (new_node);
+}
+
+t_node	*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter)
+{
+	char	**new_node;
+	int		i;
+	int		j;
+
+	i = -1;
+	new_node = ft_split(argv, delimiter);
+	while (new_node[++i])
+		insert_end(&t_list_a, ft_atoi_check_numbers(new_node[i], t_list_a));
+	freeAll(new_node);
 	return (t_list_a);
 }
 
-int	ft_atoi_check_numbers(const char *str)
+int	ft_atoi_check_numbers(const char *str, t_node *t_list_a)
 {
 	int		i;
 	int		sign;
@@ -97,7 +112,7 @@ int	ft_atoi_check_numbers(const char *str)
 		if (str[i] == '-' || str[i] == '+')
 			i++;
 		if (str[i] >= 9 && str[i] <= 0)
-			printf("ERRO NO ATOI");
+			deallocate(&t_list_a, 1);
 	}
 	i = 0;
 	if (str[i] == '-' || str[i] == '+')
@@ -109,25 +124,41 @@ int	ft_atoi_check_numbers(const char *str)
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		res = res * 10 + str[i] - '0';
-		if (res > 2147483647 || res < -2147483648)
-			printf("ERRO NO ATOI");
+		if (res >= 2147483648)
+			deallocate(&t_list_a, 1);
 		i++;
 	}
 	return (res * sign);
 }
 
-t_node	*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter)
+void	insert_end(t_node **root, int value)
 {
-	char	**str_temp;
-	int		i;
+	t_node	*new_node;
+	t_node	*curr;
 
-	i = 0;
-	str_temp = ft_split((char *) argv, delimiter);
-	while (str_temp[i++])
-		insert_end(&t_list_a, ft_atoi_check_numbers(str_temp[i]));
-	while (str_temp[i++])
-		free(str_temp[i]);
-	return (t_list_a);
+	curr = *root;
+	new_node = malloc(sizeof(t_node));
+	if (new_node == NULL)
+		return ;
+	new_node->next = NULL;
+	new_node->content = value;
+	if (*root == NULL)
+	{
+		new_node->next = *root;
+		*root = new_node;
+		return ;
+	}
+	if (curr->content == value)
+		deallocate(root, 1);
+	while (curr->next)
+	{
+		if (curr->content == value)
+			deallocate(root, 1);
+		curr = curr->next;
+	}
+	if (curr->content == value)
+		deallocate(root, 1);
+	curr->next = new_node;
 }
 
 void	printList(t_node *root)
@@ -147,43 +178,22 @@ void	printList(t_node *root)
 	}
 }
 
-void	insert_end(t_node **root, int value)
+void	deallocate(t_node **root, int message)
 {
-	t_node	*new_node;
-	t_node	*curr;
-
-	curr = *root;
-	new_node = malloc(sizeof(t_node));
-	if (new_node == NULL)
-		return ;
-	new_node->next = NULL;
-	new_node->content = value;
-	if (*root == NULL)
-	{
-		*root = new_node;
-		return ;
-	}
-	curr = *root;
-	while (curr->next != NULL)
-		curr = curr->next;
-	curr->next = new_node;
-
-}
-
-void	deallocate(t_node *root)
-{
-	t_node	*curr;
 	t_node	*temp;
 
-	curr = root;
-	while (curr->next != NULL)
+	// if (!*root)
+	// 	exit (write(1, "errorDel1\n", 10));
+	while (*root)
 	{
-		temp = curr;
-		curr = curr->next;
-		free(temp);
+		temp = (*root)->next;
+		free(*root);
+		*root = temp;;
 	}
+	root = NULL;
+	if (message == 1)
+		exit (write(1, "errorDel\n", 9));
 }
-// "+1 +1 -3 -2
 
 char	write_word(char *dest, const char *from, char set)
 {
@@ -276,5 +286,12 @@ void	freeAll(char **result)
     free(result);
 }
 
+void	print_array_2d(char **arr_bidimensional)
+{
+	int	i;
+	int	j;
 
-//gcc -fsanitize=address count_words.c -g -o split_rec
+	i = -1;
+	while (arr_bidimensional[++i])
+		printf("%s", arr_bidimensional[i]);
+}
