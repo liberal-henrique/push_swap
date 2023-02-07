@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:55:36 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/07 17:34:24 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/07 19:40:04 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,11 @@ t_node	*initialize_list_link(char **argv, t_node *t_list_a)
 	{
 		j = 0;
 		flag = 0;
+		printf("%i\n", i);
 		while (argv[i][j++])
 		{
-			//printf("%i", i);
+			// printf("i: %i\n", i);
+			// printf("j: %i\n", j);
 			if ((argv[i][j] >= 9 && argv[i][j] <= 13) || argv[i][j] == 32)
 			{
 				flag = 1;
@@ -98,6 +100,20 @@ t_node	*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter)
 	return (t_list_a);
 }
 
+void	ft_isnum(const char *str, t_node *t_list_a)
+{
+    int i;
+
+    i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '-' || str[i] == '+')
+			i++;
+		if ((str[i] > '9' || str[i] < '0'))
+			deallocate(&t_list_a, 1);
+	}
+}
+
 int	ft_atoi_check_numbers(const char *str, t_node *t_list_a)
 {
 	int		i;
@@ -107,15 +123,8 @@ int	ft_atoi_check_numbers(const char *str, t_node *t_list_a)
 	i = 0;
 	sign = 1;
 	res = 0;
-	while (str[i])
-	{
-		if (str[i] == '-' || str[i] == '+')
-			i++;
-		if ((str[i] <= 48 && str[i] >= 57) || str[i] == '+' || str[i] == '-' || str[i] == '\0')
-			deallocate(&t_list_a, 1);
-		i++;
-	}
-	i = 0;
+
+	ft_isnum(str, t_list_a);
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i] == '-')
