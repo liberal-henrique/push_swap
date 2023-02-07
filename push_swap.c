@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:55:36 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/07 15:12:11 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/07 17:34:24 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int	main(int argc, char **argv)
 	if (argc < 2)
 		return (0);
 	t_list_a = initialize_list_link(argv + 1, t_list_a);
-	printf("Stack A :");
 	printList(t_list_a);
 	deallocate(&t_list_a, 0);
 	return (0);
@@ -71,15 +70,16 @@ t_node	*initialize_list_link(char **argv, t_node *t_list_a)
 		flag = 0;
 		while (argv[i][j++])
 		{
+			//printf("%i", i);
 			if ((argv[i][j] >= 9 && argv[i][j] <= 13) || argv[i][j] == 32)
 			{
 				flag = 1;
 				new_node = ft_split_create_str(new_node, argv[i], argv[i][j]);
 				break ;
 			}
-			if (flag == 0)
-				insert_end(&new_node, ft_atoi_check_numbers(argv[i], t_list_a));
 		}
+		if (flag == 0)
+			insert_end(&new_node, ft_atoi_check_numbers(argv[i], t_list_a));
 	}
 	return (new_node);
 }
@@ -107,12 +107,13 @@ int	ft_atoi_check_numbers(const char *str, t_node *t_list_a)
 	i = 0;
 	sign = 1;
 	res = 0;
-	while (str[i++])
+	while (str[i])
 	{
 		if (str[i] == '-' || str[i] == '+')
 			i++;
-		if (str[i] >= 9 && str[i] <= 0)
+		if ((str[i] <= 48 && str[i] >= 57) || str[i] == '+' || str[i] == '-' || str[i] == '\0')
 			deallocate(&t_list_a, 1);
+		i++;
 	}
 	i = 0;
 	if (str[i] == '-' || str[i] == '+')
@@ -137,6 +138,7 @@ void	insert_end(t_node **root, int value)
 	t_node	*curr;
 
 	curr = *root;
+	//printf("%i\n", value);
 	new_node = malloc(sizeof(t_node));
 	if (new_node == NULL)
 		return ;
@@ -192,7 +194,7 @@ void	deallocate(t_node **root, int message)
 	}
 	root = NULL;
 	if (message == 1)
-		exit (write(1, "errorDel\n", 9));
+		exit (write(1, "errorDeallo\n", 12));
 }
 
 char	write_word(char *dest, const char *from, char set)
