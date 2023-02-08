@@ -42,11 +42,19 @@ criar um documento learning.c o problema nao estava nem no meu atoi nem
 no meu insert_end. Avaliando a situacao percebi que o meu codigo esta
 adicionando de forma repetida os valores negativos. Por isso, ele nao
 consegue adiciona-los.
-	--> preciso aceitar numeros juntos separados apenas por sinais. O problema
-	e a forma como estou a usar meu atoi. Tendo em vista que apenas e impressa
-	uma casa depois do sinal. Portanto, posso criar uma funcao que percorra
-	minha string e faca o que o atoi faz em todos os digitos.
-	--> preciso perceber se a lista ja esta "sorted"
+	(0k)--> preciso perceber se a lista ja esta "sorted"
+	(0k)--> eu preciso lidar com o menor integer de todos;
+
+
+	--> quando eu introduzo -2147483648 meu output e de correto. Contudo,
+	quando eu introduzo 2147483648 meu output e de -2147483648.
 	--> preciso fazer os movimentos
 	--> preciso comecar a organizar qual sera o algoritmo que usarei
 	midpoint algorithm;
+
+
+no subject do projeto falou em: duplicated, integers, bigger than int,
+
+- Instructions must be separated by a ’\n’ and nothing else.
+- If no parameters are specified, the program must not display anything and give the
+prompt back

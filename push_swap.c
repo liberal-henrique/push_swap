@@ -6,20 +6,18 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:55:36 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/07 19:40:04 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/08 16:26:01 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 //#include "./push_swap.h"
+// 42 Norminette Highlighter
 
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
-
-
-// 42 Norminette Highlighter
 
 typedef struct s_node
 {
@@ -39,20 +37,54 @@ t_node	*initialize_list_link(char **argv, t_node *t_list_a);
 void	print_array_2d(char **arr_bidimensional);
 t_node	*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter);
 void	printList(t_node *root);
+int		list_sorted(t_node **root);
+int		count_items(t_node *root);
 
 int	main(int argc, char **argv)
 {
 	t_node	*t_list_a;
-	int		i;
 
-	i = 1;
 	t_list_a = NULL;
 	if (argc < 2)
 		return (0);
 	t_list_a = initialize_list_link(argv + 1, t_list_a);
+	if (list_sorted(&t_list_a) == 1 && count_items(t_list_a) > 1)
+	{
+		printf("Sorted");
+		deallocate(&t_list_a, 1);
+	}
 	printList(t_list_a);
 	deallocate(&t_list_a, 0);
 	return (0);
+}
+
+int		list_sorted(t_node **root)
+{
+	t_node	*curr;
+
+	curr = *root;
+	while (curr->next)
+	{
+		if (curr->content > curr->next->content)
+			return (0);
+		curr = curr->next;
+	}
+	return (1);
+}
+
+int	count_items(t_node	*root)
+{
+	t_node	*curr;
+	int	i;
+
+	i = 0;
+	curr = root;
+	while (curr != NULL)
+	{
+		i++;
+		curr = curr->next;
+	}
+	return (i);
 }
 
 t_node	*initialize_list_link(char **argv, t_node *t_list_a)
@@ -68,11 +100,8 @@ t_node	*initialize_list_link(char **argv, t_node *t_list_a)
 	{
 		j = 0;
 		flag = 0;
-		printf("%i\n", i);
 		while (argv[i][j++])
 		{
-			// printf("i: %i\n", i);
-			// printf("j: %i\n", j);
 			if ((argv[i][j] >= 9 && argv[i][j] <= 13) || argv[i][j] == 32)
 			{
 				flag = 1;
@@ -114,17 +143,39 @@ void	ft_isnum(const char *str, t_node *t_list_a)
 	}
 }
 
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
+{
+	unsigned int	i;
+
+	i = 0;
+	if (n == 0)
+		return (0);
+	while (i < n)
+	{
+		if ((unsigned char )s1[i] != (unsigned char)s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		if ((unsigned char )s1[i] == '\0')
+			break ;
+		i++;
+	}
+	return (1);
+}
+
 int	ft_atoi_check_numbers(const char *str, t_node *t_list_a)
 {
 	int		i;
 	int		sign;
+	int		flag;
 	long int	res;
 
 	i = 0;
 	sign = 1;
 	res = 0;
+	flag = 0;
 
 	ft_isnum(str, t_list_a);
+	if (ft_strncmp("-2147483648", str, 11) == 1)
+		flag = 1;
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i] == '-')
@@ -134,7 +185,7 @@ int	ft_atoi_check_numbers(const char *str, t_node *t_list_a)
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		res = res * 10 + str[i] - '0';
-		if (res >= 2147483648)
+		if (res > 2147483648 && flag != 1)
 			deallocate(&t_list_a, 1);
 		i++;
 	}
@@ -147,7 +198,6 @@ void	insert_end(t_node **root, int value)
 	t_node	*curr;
 
 	curr = *root;
-	//printf("%i\n", value);
 	new_node = malloc(sizeof(t_node));
 	if (new_node == NULL)
 		return ;
