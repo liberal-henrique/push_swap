@@ -6,18 +6,15 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:55:36 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/08 16:26:01 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/09 11:39:00 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 //#include "./push_swap.h"
-// 42 Norminette Highlighter
-
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <unistd.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<unistd.h>
 
 typedef struct s_node
 {
@@ -25,20 +22,22 @@ typedef struct s_node
 	struct s_node	*next;
 }					t_node;
 
-int		ft_atoi_check_numbers(const char *str, t_node *t_list_a);
-void	insert_end(t_node **root, int value);
-void	deallocate(t_node **root, int message);
-char	write_word(char *dest, const char *from, char set);
-char	**ft_split(char const *s, char c);
-int		word_count(const char *sr, char delimiter);
-void	add_split(char **dst, const char *string, char delimiter);
-void	freeAll(char **result);
-t_node	*initialize_list_link(char **argv, t_node *t_list_a);
-void	print_array_2d(char **arr_bidimensional);
-t_node	*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter);
-void	printList(t_node *root);
-int		list_sorted(t_node **root);
-int		count_items(t_node *root);
+void		insert_end(t_node **root, int value);
+void		deallocate(t_node **root, int message);
+char		write_word(char *dest, const char *from, char set);
+char		**ft_split(char const *s, char c);
+int			word_count(const char *sr, char delimiter);
+void		add_split(char **dst, const char *string, char delimiter);
+void		freeAll(char **result);
+t_node		*initialize_list_link(char **argv, t_node *t_list_a);
+void		print_array_2d(char **arr_bidimensional);
+t_node		*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter);
+void		printList(t_node *root);
+int			list_sorted(t_node **root);
+int			count_items(t_node *root);
+int			ft_strncmp(const char *s1, const char *s2, size_t n);
+int			ft_isnum_compare(const char *str, t_node *t_list_a);
+long int	ft_atoi_check_numbers(const char *str, t_node *t_list_a);
 
 int	main(int argc, char **argv)
 {
@@ -58,7 +57,7 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-int		list_sorted(t_node **root)
+int	list_sorted(t_node **root)
 {
 	t_node	*curr;
 
@@ -75,7 +74,7 @@ int		list_sorted(t_node **root)
 int	count_items(t_node	*root)
 {
 	t_node	*curr;
-	int	i;
+	int		i;
 
 	i = 0;
 	curr = root;
@@ -129,20 +128,6 @@ t_node	*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter)
 	return (t_list_a);
 }
 
-void	ft_isnum(const char *str, t_node *t_list_a)
-{
-    int i;
-
-    i = -1;
-	while (str[++i])
-	{
-		if (str[i] == '-' || str[i] == '+')
-			i++;
-		if ((str[i] > '9' || str[i] < '0'))
-			deallocate(&t_list_a, 1);
-	}
-}
-
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
 	unsigned int	i;
@@ -161,31 +146,45 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return (1);
 }
 
-int	ft_atoi_check_numbers(const char *str, t_node *t_list_a)
+int	ft_isnum_compare(const char *str, t_node *t_list_a)
 {
-	int		i;
-	int		sign;
-	int		flag;
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '-' || str[i] == '+')
+			i++;
+		if ((str[i] > '9' || str[i] < '0'))
+			deallocate(&t_list_a, 1);
+	}
+	if (ft_strncmp("-2147483648", str, 11) == 1)
+		return (1);
+	return (0);
+}
+
+long int	ft_atoi_check_numbers(const char *str, t_node *t_list_a)
+{
+	int			i;
+	int			sign;
+	int			flag;
 	long int	res;
 
 	i = 0;
 	sign = 1;
 	res = 0;
-	flag = 0;
-
-	ft_isnum(str, t_list_a);
-	if (ft_strncmp("-2147483648", str, 11) == 1)
-		flag = 1;
+	flag = ft_isnum_compare(str, t_list_a);
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i] == '-')
 			sign *= -1;
 		i++;
 	}
+	printf("%i\n", flag);
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		res = res * 10 + str[i] - '0';
-		if (res > 2147483648 && flag != 1)
+		if (res >= 2147483648 && flag != 1)
 			deallocate(&t_list_a, 1);
 		i++;
 	}
@@ -232,7 +231,7 @@ void	printList(t_node *root)
 		if (curr->next == NULL)
 		{
 			printf("[*][%ld]", (long int)curr->content);
-			break;
+			break ;
 		}
 		printf("[*][%ld]->", (long int)curr->content);
 		curr = curr->next;
@@ -243,13 +242,11 @@ void	deallocate(t_node **root, int message)
 {
 	t_node	*temp;
 
-	// if (!*root)
-	// 	exit (write(1, "errorDel1\n", 10));
 	while (*root)
 	{
 		temp = (*root)->next;
 		free(*root);
-		*root = temp;;
+		*root = temp;
 	}
 	root = NULL;
 	if (message == 1)
@@ -273,7 +270,7 @@ char	write_word(char *dest, const char *from, char set)
 	return (*dest);
 }
 
-int	word_count(const char *sr, char delimiter)
+int	word_count(const char *sr, char del)
 {
 	int	j;
 	int	word;
@@ -282,7 +279,7 @@ int	word_count(const char *sr, char delimiter)
 	word = 0;
 	while (sr[j])
 	{
-		if (sr[j] != delimiter && ((sr[j + 1] == delimiter) || (sr[j + 1] == '\0')))
+		if (sr[j] != del && ((sr[j + 1] == del) || (sr[j + 1] == '\0')))
 			word++;
 		j++;
 	}
@@ -344,7 +341,7 @@ void	freeAll(char **result)
 		free(result[i]);
 		i++;
 	}
-    free(result);
+	free (result);
 }
 
 void	print_array_2d(char **arr_bidimensional)
