@@ -43,12 +43,9 @@ no meu insert_end. Avaliando a situacao percebi que o meu codigo esta
 adicionando de forma repetida os valores negativos. Por isso, ele nao
 consegue adiciona-los.
 	(0k)--> preciso perceber se a lista ja esta "sorted"
-	(0k)--> eu preciso lidar com o menor integer de todos;
+	(0k)--> eu preciso lidar com o menor e o maior integer de todos;
 
-
-	--> quando eu introduzo -2147483648 meu output e de correto. Contudo,
-	quando eu introduzo 2147483648 meu output e de -2147483648.
-	--> preciso fazer os movimentos
+	(PROCESS)--> preciso fazer os movimentos;
 	--> preciso comecar a organizar qual sera o algoritmo que usarei
 	midpoint algorithm;
 
