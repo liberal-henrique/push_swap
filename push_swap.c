@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:55:36 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/09 11:39:00 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/10 12:24:43 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ int			word_count(const char *sr, char delimiter);
 void		add_split(char **dst, const char *string, char delimiter);
 void		freeAll(char **result);
 t_node		*initialize_list_link(char **argv, t_node *t_list_a);
-void		print_array_2d(char **arr_bidimensional);
+void		print_t_node	*t_list_a;
+	t_node	*t_list_b;
+array_2d(char **arr_bidimensional);
 t_node		*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter);
 void		printList(t_node *root);
 int			list_sorted(t_node **root);
@@ -49,7 +51,6 @@ int	main(int argc, char **argv)
 	t_list_a = initialize_list_link(argv + 1, t_list_a);
 	if (list_sorted(&t_list_a) == 1 && count_items(t_list_a) > 1)
 	{
-		printf("Sorted");
 		deallocate(&t_list_a, 1);
 	}
 	printList(t_list_a);
@@ -118,7 +119,6 @@ t_node	*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter)
 {
 	char	**new_node;
 	int		i;
-	int		j;
 
 	i = -1;
 	new_node = ft_split(argv, delimiter);
@@ -180,7 +180,6 @@ long int	ft_atoi_check_numbers(const char *str, t_node *t_list_a)
 			sign *= -1;
 		i++;
 	}
-	printf("%i\n", flag);
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		res = res * 10 + str[i] - '0';
@@ -347,7 +346,6 @@ void	freeAll(char **result)
 void	print_array_2d(char **arr_bidimensional)
 {
 	int	i;
-	int	j;
 
 	i = -1;
 	while (arr_bidimensional[++i])

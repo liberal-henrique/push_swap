@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 11:32:24 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/09 13:21:14 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/10 14:22:48 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ void	sa(t_node **t_list_a)
 {
 	t_node	*second;
 
+	if (!*t_list_a)
+		return ;
 	second = (*t_list_a)->next;
 	(*t_list_a)->next = second->next;
 	second->next = *t_list_a;
@@ -92,6 +94,8 @@ void	sb(t_node **t_list_b)
 {
 	t_node	*second;
 
+	if (!*t_list_b)
+		return ;
 	second = (*t_list_b)->next;
 	(*t_list_b)->next = second->next;
 	second->next = *t_list_b;
@@ -100,32 +104,115 @@ void	sb(t_node **t_list_b)
 
 void	ss(t_node **t_list_a, t_node **t_list_b)
 {
-	t_node	*second_a;
-	t_node	*second_b;
-
-	second_a = (*t_list_a)->next;
-	(*t_list_a)->next = second_a->next;
-	second_a->next = *t_list_a;
-	*t_list_a = second_a;
-	second_b = (*t_list_b)->next;
-	(*t_list_b)->next = second_b->next;
-	second_b->next = (*t_list_b);
-	*t_list_b = second_b;
+	sa(t_list_a);
+	sb(t_list_b);
 }
 
 void	pa(t_node **t_list_a, t_node **t_list_b)
 {
-	
+	t_node	*curr;
+
+	if (!*t_list_b)
+		return ;
+	curr = *t_list_b;
+	*t_list_b = curr->next;
+	curr->next = *t_list_a;
+	*t_list_a = curr;
+}
+
+void	pb(t_node **t_list_b, t_node **t_list_a)
+{
+	t_node	*curr;
+
+	if (!t_list_a)
+		return ;
+	curr = *t_list_a;
+	*t_list_a = curr->next;
+	curr->next = *t_list_b;
+	*t_list_b = curr;
+}
+
+void	ra(t_node **t_list_a)
+{
+	t_node	*curr;
+	t_node	*temp;
+
+	if (!*t_list_a)
+		return ;
+	curr = *t_list_a;
+	temp = *t_list_a;
+	*t_list_a = curr->next;
+	while (curr->next != NULL)
+		curr = curr->next;
+	curr->next = temp;
+	temp->next = NULL;
+}
+
+void	rb(t_node **t_list_b)
+{
+	t_node	*curr;
+	t_node	*temp;
+
+	if (!*t_list_b)
+		return ;
+	curr = *t_list_b;
+	temp = *t_list_b;
+	*t_list_b = curr->next;
+	while (curr->next != NULL)
+		curr = curr->next;
+	curr->next = temp;
+	temp->next = NULL;
+}
+
+void	rr(t_node **t_list_a ,t_node **t_list_b)
+{
+	ra(t_list_a);
+	rb(t_list_b);
+}
+
+void	rra(t_node **t_list_a)
+{
+	t_node	*curr;
+	t_node	*before_last;
+
+	curr = *t_list_a;
+	before_last = *t_list_a;
+	while (curr->next != NULL)
+		curr = curr->next;
+	while (before_last->next != curr)
+		before_last = before_last->next;
+	curr->next = *t_list_a;
+	*t_list_a = curr;
+	before_last->next = NULL;
+}
+
+void	rrb(t_node **t_list_b)
+{
+	t_node	*curr;
+	t_node	*before_last;
+
+	curr = *t_list_b;
+	before_last = *t_list_b;
+	while (curr->next != NULL)
+		curr = curr->next;
+	while (before_last->next != curr)
+		before_last = before_last->next;
+	curr->next = *t_list_b;
+	*t_list_b = curr;
+	before_last->next = NULL;
+}
+
+void	rrr(t_node **t_list_a, t_node **t_list_b)
+{
+	rra(t_list_a);
+	rrb(t_list_b);
 }
 
 int	main(void)
 {
-	int		i;
-	int		number;
 	t_node	*t_list_a;
 	t_node	*t_list_b;
 
-	i = 0;
 	t_list_a = NULL;
 	t_list_b = NULL;
 	insert_end(&t_list_a, 5);
@@ -133,7 +220,7 @@ int	main(void)
 	insert_end(&t_list_a, 8);
 	insert_end(&t_list_a, 9);
 	insert_end(&t_list_a, 10);
-	printf("\n");
+	//------------------------------------------
 	insert_end(&t_list_b, 12);
 	insert_end(&t_list_b, 14);
 	insert_end(&t_list_b, 16);
@@ -142,14 +229,26 @@ int	main(void)
 	printList(t_list_a);
 	printf("\n");
 	printList(t_list_b);
-	ss(&t_list_a, &t_list_b);
-	printList(t_list_a);
-		printf("\n");
-	printList(t_list_b);
+
 
 	printf("\n");
+
+	//Here the code to change the lists
+
+	printf("\n");
+	printf("\n");
+	printf("\n");
+	printf("\n");
+
+
+	printf("List A: ");
 	printList(t_list_a);
-		printf("\n");
+	printf("\n");
+	printf("List B: ");
+	printList(t_list_b);
+
+
+
 	deallocate(&t_list_a, 0);
 	return (0);
 }
