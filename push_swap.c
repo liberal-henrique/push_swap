@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:55:36 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/10 12:24:43 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/13 15:01:44 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 typedef struct s_node
 {
 	int				content;
+	int				size_a;
+	int				size_b;
 	struct s_node	*next;
 }					t_node;
 
@@ -30,9 +32,7 @@ int			word_count(const char *sr, char delimiter);
 void		add_split(char **dst, const char *string, char delimiter);
 void		freeAll(char **result);
 t_node		*initialize_list_link(char **argv, t_node *t_list_a);
-void		print_t_node	*t_list_a;
-	t_node	*t_list_b;
-array_2d(char **arr_bidimensional);
+void		print_array_2d(char **arr_bidimensional);
 t_node		*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter);
 void		printList(t_node *root);
 int			list_sorted(t_node **root);
@@ -50,9 +50,7 @@ int	main(int argc, char **argv)
 		return (0);
 	t_list_a = initialize_list_link(argv + 1, t_list_a);
 	if (list_sorted(&t_list_a) == 1 && count_items(t_list_a) > 1)
-	{
 		deallocate(&t_list_a, 1);
-	}
 	printList(t_list_a);
 	deallocate(&t_list_a, 0);
 	return (0);
