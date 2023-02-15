@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:31:06 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/15 15:02:07 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/15 16:14:37 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -355,25 +355,6 @@ void	sort_4_elements(t_node **a, t_node **b)
 		ra(a);
 }
 
-// 7-1-2-4-3
-// 1-2-4-3-7
-
-
-
-// 2-4-1-7-3
-
-
-// 2-1-4-7-3
-// 4-2-1-7-3
-//5-4-1-3-2-
-//119 possibilidades
-
-//nao queremos pb o do meio!!!3
-
-//Melhor dos mundo lancar os menores;
-
-//25-26-24-29-27
-
 void	sortList(t_node **a)
 {
 	t_node	*current;
@@ -401,67 +382,32 @@ void	sortList(t_node **a)
 	}
 }
 
-// void	return_index(t_node **t_list_a, int position)
-// {
-// 	sortList(a);
-// }
 
-
-int	give_index(t_node **a, t_node **b)
+int	give_index(t_node **a, t_node **b, int position)
 {
 	t_node	*temp;
 	int		index_b_in_a;
+	int		pos;
 
 	temp = (*a);
+	pos = 0;
 	index_b_in_a = 0;
+	if (position == 0)
+		pos = (*b)->x;
+	if (position == 1)
+		pos = (*b)->next->x;
 	while (temp != NULL)
 	{
-		if ((*b)->x > temp->x)
-		{
+		if (pos > temp->x)
 			index_b_in_a++;
-		}
-		if ((*b)->x < temp->x)
+		if (pos < temp->x)
 			break ;
 		temp = temp->next;
 	}
 	return (index_b_in_a);
 }
 
-
-// a-1-2-7-9
-
-
-// a -8-1-2-7-9rra
-
-//9-8-1-2-7sa
-//8-9-1-2-7
-
-// void	sort_5_elements(t_node **a, t_node **b)
-// {
-// 	int	index;
-// 	int	meio;
-// 	int	quarto;
-
-// 	meio = sortList(a);
-// 	if ((*a)->x == temp)
-// 		ra(a);
-// 	if ((*a)->next->x == temp)
-// 	{
-// 		ra(a);
-// 		ra(a);
-// 	}
-// 	pb(b, a);
-// 	sort_4_elements(a, b);
-// 	index = give_index(a, b);
-
-// }
-
-// 1 3 2 4 5 pa
-// 3 2 4 5 rat_list_a
-// 2 4 5 3 pa
-// 4 5 3
-
-t_node* cloneList(t_node *head)
+t_node* cloneList(t_node **head)
 {
 	t_node	*new_list;
 	t_node	*new_node;
@@ -470,8 +416,7 @@ t_node* cloneList(t_node *head)
 
 	prev = NULL;
 	new_list = NULL;
-	current = head;
-
+	current = *head;
 	while (current != NULL)
 	{
 		new_node = malloc(sizeof(t_node));
@@ -487,31 +432,51 @@ t_node* cloneList(t_node *head)
 	}
 	return (new_list);
 }
+//	Eu tenho garantido que os elementos serao o
+//primeiro, segundo e o ultimo
+void	sort_5_elements(t_node **a, t_node **b)
+{
+	//int	index;
+	int	meio;
+	int	pultimo;
+	t_node *list_temp;
+
+	list_temp = cloneList(a);
+	sortList(&list_temp);
+	meio = list_temp->next->next->x;
+	pultimo = list_temp->next->next->next->x;
+	if ((*a)->x == meio || (*a)->x == pultimo)
+		ra(a);
+	if ((*a)->x == meio || (*a)->x == pultimo)
+		ra(a);
+	pb(b, a);
+	pb(b, a);
+	sort_3_elements(a);
+	index = give_index(a, b);
+
+}
 
 
 int	main(void)
 {
 	t_node	*t_list_a;
-	//t_node	*t_list_b;
+	t_node	*t_list_b;
 
 	t_list_a = NULL;
-	//t_list_b = NULL;
+	t_list_b = NULL;
+	insert_end(&t_list_a, 4);
+	insert_end(&t_list_a, 36);
 	insert_end(&t_list_a, 3);
 	insert_end(&t_list_a, 2);
-	insert_end(&t_list_a, 36);
 	insert_end(&t_list_a, 121);
-	insert_end(&t_list_a, 4);
 
 	//------------------------------------------
-	t_node *list_temp;
 
-	list_temp = cloneList(t_list_a);
-	sortList(&list_temp);
-	printf("List clone: ");
-	//printList(t_list_a);
+	printf("List A: ");
+	printList(t_list_a);
 	printf("\n");
 
-	printList(list_temp);
+	printList(t_list_a);
 
 
 	// //sort_3_elements(&t_list_a);
@@ -519,9 +484,9 @@ int	main(void)
 	// printf("\n");
 	// printf("\n");
 
-	// sort_5_elements(&t_list_a, &t_list_b);
-	// printf("\n");
-	// printList(t_list_a);
+	sort_5_elements(&t_list_a, &t_list_b);
+	printf("\n");
+	printList(t_list_a);
 
 
 	deallocate(&t_list_a, 0);
