@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:31:06 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/13 19:20:40 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/15 11:06:52 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,27 +337,23 @@ void	sort_4_elements(t_node **a, t_node **b)
 {
 
 	if (sm(a) == 0 || big(a) == 0)
-	{
-		printf("0");
-		printf("\n");
 		pb(b, a);
-	}
 	else if (sm(a) == 1 || big(a) == 1)
 	{
-		printf("1");
 		sa(a);
-		pb(a, b);
+		if (list_sorted(a))
+			return ;
+		pb(b, a);
 	}
 	else if (sm(a) == 3 || big(a) == 3)
 	{
-		printf("2");
-		ra(a);
-		pb(a, b);
+		rra(a);
+		if (list_sorted(a))
+			return ;
+		pb(b, a);
 	}
-	printList(a);
-	printf("\n");
 	sort_3_elements(a);
-	pa(b, a);
+	pa(a, b);
 	if (!(list_sorted(a)))
 		ra(a);
 }
@@ -370,12 +366,11 @@ int	main(void)
 	t_list_a = NULL;
 	t_list_b = NULL;
 	insert_end(&t_list_a, 7);
-	insert_end(&t_list_a, 2);
 	insert_end(&t_list_a, 1);
+	insert_end(&t_list_a, 2);
 	insert_end(&t_list_a, 4);
 
 	//------------------------------------------
-
 
 	printf("List A: ");
 	printList(t_list_a);
@@ -384,9 +379,9 @@ int	main(void)
 
 	printf("\n");
 	printf("\n");
-	printf("\n");
-	sort_4_elements(&t_list_a, &t_list_b);
 
+	sort_4_elements(&t_list_a, &t_list_b);
+	printf("\n");
 	printList(t_list_a);
 
 
