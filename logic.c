@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:31:06 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/15 16:14:37 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/15 17:42:58 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,26 +228,6 @@ void	deallocate(t_node **root, int message)
 		exit(write(1, "errorDeallo\n", 12));
 }
 
-// Logic to 3 elements:content
-// I will start the sorting making two questions
-
-// The top element is bigger than the bottom element?
-
-// The top element is bigger than the middle element?
-
-// 3, 1, 2 --> yes and yes --> (ra) --> 1, 2, 3(sorted);
-// 3, 2, 1 --> yes and yes --> (sa) --> 2, 3, 1 --> (rra) --> 1, 2, 3(sorted)
-// 2, 1, 3 --> yes and NO  --> (sa)  --> 1, 2, 3 (Sorted)
-// 2, 3, 1 --> no and yes  --> (rra) --> 1, 2, 3(sorted);
-// 1, 3, 2 --> no and no   --> (sa) --> 3, 1, 2 --> (ra) --> 1, 2, 3(Sorted)
-
-// typedef struct s_node
-// {
-// 	int				x;
-// 	int				value;
-// 	struct s_node	*next;
-// }					t_node;
-
 int	sm(t_node **a)
 {
 	t_node	*temp;
@@ -299,11 +279,7 @@ int	big(t_node **a)
 		index_biggest++;
 	}
 	return (index_biggest);
-}// 2-4-1-5-3
-
-
-//1-2-3-4-5
-
+}
 
 void	sort_3_elements(t_node **a)
 {
@@ -382,8 +358,7 @@ void	sortList(t_node **a)
 	}
 }
 
-
-int	give_index(t_node **a, t_node **b, int position)
+int	give_index_b_a(t_node **a, t_node **b, int position)
 {
 	t_node	*temp;
 	int		index_b_in_a;
@@ -432,27 +407,116 @@ t_node* cloneList(t_node **head)
 	}
 	return (new_list);
 }
-//	Eu tenho garantido que os elementos serao o
-//primeiro, segundo e o ultimo
-void	sort_5_elements(t_node **a, t_node **b)
+
+int	ft_pultimo(t_node **a)
 {
-	//int	index;
-	int	meio;
-	int	pultimo;
-	t_node *list_temp;
+	t_node	*list_temp;
+	int		pultimo;
+
+	list_temp = cloneList(a);
+	sortList(&list_temp);
+	pultimo = list_temp->next->next->next->x;
+	deallocate(&list_temp, 0);
+	return (pultimo);
+}
+
+int	ft_meio(t_node **a)
+{
+	t_node	*list_temp;
+	int		meio;
 
 	list_temp = cloneList(a);
 	sortList(&list_temp);
 	meio = list_temp->next->next->x;
-	pultimo = list_temp->next->next->next->x;
-	if ((*a)->x == meio || (*a)->x == pultimo)
-		ra(a);
-	if ((*a)->x == meio || (*a)->x == pultimo)
-		ra(a);
+	deallocate(&list_temp, 0);
+	return (meio);
+}
+
+// void	sort_5_elements(t_node **a, t_node **b)
+// {
+// 	if ((*a)->next->x == ft_meio(a) || (*a)->next->x == ft_pultimo(a))
+// 	{
+// 		sa(a);
+// 		ra(a);
+// 	}
+// 	if ((*a)->x == ft_meio(a) || (*a)->x == ft_pultimo(a))
+// 	{
+// 		ra(a);
+// 		if ((*a)->x == ft_meio(a) || (*a)->x == ft_pultimo(a))
+// 			ra(a);
+// 	}
+// 	if ((*a)->x == ft_meio(a) || (*a)->x == ft_pultimo(a))
+// 		pb(b, a);
+// 	pb(b, a);
+// 	sort_3_elements(a);
+// 	// if ((*b)->x < (*b)->next->x)
+// 	// 	sb(b);
+// 	//pa(a, b);
+// 	if (!(list_sorted(a)))
+// 		ra(a);
+// 	//pa(a, b);
+// 	if (!(list_sorted(a)))
+// 		sa(a);
+// }
+
+int	give_index(t_node **a, int element)
+{
+	t_node	*temp;
+	int		index_a;
+
+	temp = (*a);
+	index_a = 0;
+	while (temp != NULL)
+	{
+		if (element > temp->x)
+			index_a++;
+		if (element < temp->x)
+			break ;
+		temp = temp->next;
+	}
+	return (index_a);
+}
+
+int	cnt_recursive(t_node *node)
+{
+	if (node == NULL)
+		return (0);
+	return (1 + cnt_recursive(node->next));
+}
+
+void	small(t_node **a, t_node **b)
+{
+	t_node	*temp;
+	int		temp_menor;
+	int		i_smallest;
+
+	temp = (*a);
+	i_smallest = 0;
+	temp_menor = (*a)->x;
+	while (temp)
+	{
+		if (temp_menor > temp->x)
+			temp_menor = temp->x;
+		temp = temp->next;
+	}
+	//i_smallest = give_index(a, temp_menor);
+	printf("%i\n", temp_menor);
+	i_smallest = cnt_recursive(*a);
+	printf("Length: %i\n", i_smallest);
+	// while ((*a)->x != temp_menor)
+	// {
+	// 	if (i_smallest <= cnt_recursive(*a)/2)
+	// 		ra(a);
+	// 	else
+	// 		rra(a);
+	// }
 	pb(b, a);
-	pb(b, a);
-	sort_3_elements(a);
-	index = give_index(a, b);
+}
+
+void	sort_5_elements(t_node **a, t_node **b)
+{
+	while (cnt_recursive(*a) != 3)
+		small(a, b);
 
 }
 
@@ -464,11 +528,11 @@ int	main(void)
 
 	t_list_a = NULL;
 	t_list_b = NULL;
-	insert_end(&t_list_a, 4);
-	insert_end(&t_list_a, 36);
-	insert_end(&t_list_a, 3);
-	insert_end(&t_list_a, 2);
 	insert_end(&t_list_a, 121);
+	insert_end(&t_list_a, 3);
+	insert_end(&t_list_a, 36);
+	insert_end(&t_list_a, 4);
+	insert_end(&t_list_a, 2);
 
 	//------------------------------------------
 
@@ -476,10 +540,7 @@ int	main(void)
 	printList(t_list_a);
 	printf("\n");
 
-	printList(t_list_a);
-
-
-	// //sort_3_elements(&t_list_a);
+	//sort_3_elements(&t_list_a);
 
 	// printf("\n");
 	// printf("\n");
