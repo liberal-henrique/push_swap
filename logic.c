@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:31:06 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/16 15:16:40 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/16 17:59:22 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,14 @@ typedef struct s_node
 	int				value;
 	struct s_node	*next;
 }					t_node;
+
+typedef struct s_chunk
+{
+	int				n_chunks;
+	int				n_elements;
+	struct s_struck	*next;
+}					t_chunk;
+
 
 void	insert_end(t_node **root, int value)
 {
@@ -522,21 +530,35 @@ int	give_value_mid(t_node **a)
 	return (mid_value);
 }
 
+//Preciso criar "algo" que va guardar o meu numero de elementos
+//em cada chunck.
+//Se nao enviarmos o midpoint sera o maior de cada chunk
+
+int	*chunks(t_node **a, int	numbers, int n_chunk)
+{
+	int	*chunks;
+
+	n_chunks = chunks(numbers, )
+	chunks = malloc(sizeof(int) * n_chunks);
+
+}
+
 void	send_sml_mid(t_node **a, t_node **b)
 {
-	int	size;
-	int mov;
-	int mid_pnt;
+	int		size;
+	int		mov;
+	int		mid_pnt;
+	t_chunk	*temp_chunk;
 
 	size = cnt_recursive(*a);
 	while (size > 3)
 	{
 		mid_pnt = give_value_mid(a);
-		mov = (cnt_recursive(*a)/2) + 1;
-		printf("mid_pnt: %i\n", mid_pnt);
+		mov = (cnt_recursive(*a)/2);
+		chunks = chunks(mov, 1);
 		while (mov > 0)
 		{
-			if ((*a)->x <= mid_pnt)
+			if ((*a)->x < mid_pnt)
 			{
 				pb(b, a);
 				mov--;
@@ -547,34 +569,18 @@ void	send_sml_mid(t_node **a, t_node **b)
 			if (size == 3)
 				break ;
 		}
-		printf("size: %i\n", size);
 	}
+	return (chunks);
 }
 
 void	sort_biggest(t_node **a, t_node **b)
 {
-	//t_node	*temp;
+	//int	*chunks;
 
-	//temp = (*b);
+	//chunks = malloc(sizeof(int) * send_sml_mid(a, b));
 	send_sml_mid(a, b);
-
-	//printList(*a);
-	//printList(temp);
-	// int		mid;
-	// int		mid_value;
-	// int		size;
-
-	// mid = 0;
-	// mid_value = give_value_mid(a);
-	// size = cnt_recursive(*a);
-	// if (size % 2 != 0)
-	// 	mid = (size / 2) + 1;
-	// else
-	// 	mid = (size / 2);
-	// printList(*b);
-	// printf("Length: %i\n", size);
-	// printf("MidPoint: %i\n", mid);
-	// printf("MidPoint value: %i\n", mid_value);
+	sort_3_elements(a);
+	//printf("HEYYY: %ls\n", chunks);
 }
 
 
@@ -584,7 +590,7 @@ int	main(void)
 	t_node	*t_list_a;
 	t_node	*t_list_b;
 
-	count = 10;
+	count = 100;
 	t_list_a = NULL;
 	t_list_b = NULL;
 	// insert_end(&t_list_a, 4);
