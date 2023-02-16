@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:31:06 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/15 17:42:58 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/16 11:15:33 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,6 +228,101 @@ void	deallocate(t_node **root, int message)
 		exit(write(1, "errorDeallo\n", 12));
 }
 
+int	give_index_b_a(t_node **a, t_node **b, int position)
+{
+	t_node	*temp;
+	int		index_b_in_a;
+	int		pos;
+
+	temp = (*a);
+	pos = 0;
+	index_b_in_a = 0;
+	if (position == 0)
+		pos = (*b)->x;
+	if (position == 1)
+		pos = (*b)->next->x;
+	while (temp != NULL)
+	{
+		if (pos > temp->x)
+			index_b_in_a++;
+		if (pos < temp->x)
+			break ;
+		temp = temp->next;
+	}
+	return (index_b_in_a);
+}
+
+int	give_index(t_node **a, int element)
+{
+	t_node	*temp;
+	int		index_a;
+
+	temp = (*a);
+	index_a = 0;
+	while (temp != NULL)
+	{
+		if (element > temp->x)
+			index_a++;
+		if (element < temp->x)
+			break ;
+		temp = temp->next;
+	}
+	return (index_a);
+}
+
+t_node* cloneList(t_node **head)
+{
+	t_node	*new_list;
+	t_node	*new_node;
+	t_node	*prev;
+	t_node	*current;
+
+	prev = NULL;
+	new_list = NULL;
+	current = *head;
+	while (current != NULL)
+	{
+		new_node = malloc(sizeof(t_node));
+		new_node->x = current->x;
+		new_node->next = NULL;
+		if (prev != NULL) {
+			prev->next = new_node;
+		} else {
+			new_list = new_node;
+		}
+		prev = new_node;
+		current = current->next;
+	}
+	return (new_list);
+}
+
+void	sortList(t_node **a)
+{
+	t_node	*current;
+	t_node	*index;
+	int temp;
+
+	temp = 0;
+	index = NULL;
+	current = *a;
+	if(*a == NULL)
+		return ;
+	else {
+		while(current != NULL) {
+			index = current->next;
+			while(index != NULL) {
+				if(current->x > index->x) {
+					temp = current->x;
+					current->x = index->x;
+					index->x = temp;
+				}
+				index = index->next;
+			}
+			current = current->next;
+		}
+	}
+}
+
 int	sm(t_node **a)
 {
 	t_node	*temp;
@@ -281,6 +376,44 @@ int	big(t_node **a)
 	return (index_biggest);
 }
 
+int	ft_pultimo(t_node **a)
+{
+	t_node	*list_temp;
+	int		pultimo;
+
+	list_temp = cloneList(a);
+	sortList(&list_temp);
+	pultimo = list_temp->next->next->next->x;
+	deallocate(&list_temp, 0);
+	return (pultimo);
+}
+
+int	ft_meio(t_node **a)
+{
+	t_node	*list_temp;
+	int		meio;
+
+	list_temp = cloneList(a);
+	sortList(&list_temp);
+	meio = list_temp->next->next->x;
+	deallocate(&list_temp, 0);
+	return (meio);
+}
+
+int	cnt_recursive(t_node *node)
+{
+	if (node == NULL)
+		return (0);
+	return (1 + cnt_recursive(node->next));
+}
+
+void	send_desire(t_node **a, t_node **b, int meio, int pnultimo)
+{
+	while ((*a)->x == meio || (*a)->x == pnultimo)
+		ra(a);
+	pb(b, a);
+}
+
 void	sort_3_elements(t_node **a)
 {
 	t_node	*b;
@@ -331,208 +464,53 @@ void	sort_4_elements(t_node **a, t_node **b)
 		ra(a);
 }
 
-void	sortList(t_node **a)
-{
-	t_node	*current;
-	t_node	*index;
-	int temp;
-
-	temp = 0;
-	index = NULL;
-	current = *a;
-	if(*a == NULL)
-		return ;
-	else {
-		while(current != NULL) {
-			index = current->next;
-			while(index != NULL) {
-				if(current->x > index->x) {
-					temp = current->x;
-					current->x = index->x;
-					index->x = temp;
-				}
-				index = index->next;
-			}
-			current = current->next;
-		}
-	}
-}
-
-int	give_index_b_a(t_node **a, t_node **b, int position)
-{
-	t_node	*temp;
-	int		index_b_in_a;
-	int		pos;
-
-	temp = (*a);
-	pos = 0;
-	index_b_in_a = 0;
-	if (position == 0)
-		pos = (*b)->x;
-	if (position == 1)
-		pos = (*b)->next->x;
-	while (temp != NULL)
-	{
-		if (pos > temp->x)
-			index_b_in_a++;
-		if (pos < temp->x)
-			break ;
-		temp = temp->next;
-	}
-	return (index_b_in_a);
-}
-
-t_node* cloneList(t_node **head)
-{
-	t_node	*new_list;
-	t_node	*new_node;
-	t_node	*prev;
-	t_node	*current;
-
-	prev = NULL;
-	new_list = NULL;
-	current = *head;
-	while (current != NULL)
-	{
-		new_node = malloc(sizeof(t_node));
-		new_node->x = current->x;
-		new_node->next = NULL;
-		if (prev != NULL) {
-			prev->next = new_node;
-		} else {
-			new_list = new_node;
-		}
-		prev = new_node;
-		current = current->next;
-	}
-	return (new_list);
-}
-
-int	ft_pultimo(t_node **a)
-{
-	t_node	*list_temp;
-	int		pultimo;
-
-	list_temp = cloneList(a);
-	sortList(&list_temp);
-	pultimo = list_temp->next->next->next->x;
-	deallocate(&list_temp, 0);
-	return (pultimo);
-}
-
-int	ft_meio(t_node **a)
-{
-	t_node	*list_temp;
-	int		meio;
-
-	list_temp = cloneList(a);
-	sortList(&list_temp);
-	meio = list_temp->next->next->x;
-	deallocate(&list_temp, 0);
-	return (meio);
-}
-
-// void	sort_5_elements(t_node **a, t_node **b)
-// {
-// 	if ((*a)->next->x == ft_meio(a) || (*a)->next->x == ft_pultimo(a))
-// 	{
-// 		sa(a);
-// 		ra(a);
-// 	}
-// 	if ((*a)->x == ft_meio(a) || (*a)->x == ft_pultimo(a))
-// 	{
-// 		ra(a);
-// 		if ((*a)->x == ft_meio(a) || (*a)->x == ft_pultimo(a))
-// 			ra(a);
-// 	}
-// 	if ((*a)->x == ft_meio(a) || (*a)->x == ft_pultimo(a))
-// 		pb(b, a);
-// 	pb(b, a);
-// 	sort_3_elements(a);
-// 	// if ((*b)->x < (*b)->next->x)
-// 	// 	sb(b);
-// 	//pa(a, b);
-// 	if (!(list_sorted(a)))
-// 		ra(a);
-// 	//pa(a, b);
-// 	if (!(list_sorted(a)))
-// 		sa(a);
-// }
-
-int	give_index(t_node **a, int element)
-{
-	t_node	*temp;
-	int		index_a;
-
-	temp = (*a);
-	index_a = 0;
-	while (temp != NULL)
-	{
-		if (element > temp->x)
-			index_a++;
-		if (element < temp->x)
-			break ;
-		temp = temp->next;
-	}
-	return (index_a);
-}
-
-int	cnt_recursive(t_node *node)
-{
-	if (node == NULL)
-		return (0);
-	return (1 + cnt_recursive(node->next));
-}
-
-void	small(t_node **a, t_node **b)
-{
-	t_node	*temp;
-	int		temp_menor;
-	int		i_smallest;
-
-	temp = (*a);
-	i_smallest = 0;
-	temp_menor = (*a)->x;
-	while (temp)
-	{
-		if (temp_menor > temp->x)
-			temp_menor = temp->x;
-		temp = temp->next;
-	}
-	//i_smallest = give_index(a, temp_menor);
-	printf("%i\n", temp_menor);
-	i_smallest = cnt_recursive(*a);
-	printf("Length: %i\n", i_smallest);
-	// while ((*a)->x != temp_menor)
-	// {
-	// 	if (i_smallest <= cnt_recursive(*a)/2)
-	// 		ra(a);
-	// 	else
-	// 		rra(a);
-	// }
-	pb(b, a);
-}
-
 void	sort_5_elements(t_node **a, t_node **b)
 {
-	while (cnt_recursive(*a) != 3)
-		small(a, b);
+	int	meio;
+	int	pnultimo;
 
+	meio = ft_meio(a);
+	pnultimo = ft_pultimo(a);
+	while (cnt_recursive(*a) != 3)
+ 		send_desire(a, b, meio, pnultimo);
+	if (!(list_sorted(a)))
+		sort_3_elements(a);
+	if ((*b)->x < (*b)->next->x)
+		sb(b);
+	pa(a, b);
+	if (!(list_sorted(a)))
+		ra(a);
+	pa(a, b);
+	if (!(list_sorted(a)))
+		sa(a);
+}
+
+
+
+void	sort_bigger(t_node **a, t_node **b, int	mid_pnt)
+{
+	while ()
 }
 
 
 int	main(void)
 {
 	t_node	*t_list_a;
-	t_node	*t_list_b;
+	//t_node	*t_list_b;
 
 	t_list_a = NULL;
-	t_list_b = NULL;
-	insert_end(&t_list_a, 121);
-	insert_end(&t_list_a, 3);
+	//t_list_b = NULL;
 	insert_end(&t_list_a, 36);
 	insert_end(&t_list_a, 4);
+	insert_end(&t_list_a, 121);
+	insert_end(&t_list_a, 3);
 	insert_end(&t_list_a, 2);
+
+	insert_end(&t_list_a, 37);
+	insert_end(&t_list_a, 5);
+	insert_end(&t_list_a, 123);
+	insert_end(&t_list_a, 13);
+	insert_end(&t_list_a, 15);
 
 	//------------------------------------------
 
@@ -544,9 +522,10 @@ int	main(void)
 
 	// printf("\n");
 	// printf("\n");
-
-	sort_5_elements(&t_list_a, &t_list_b);
+	//sort_5_elements(&t_list_a, &t_list_b);
+	sortList(&t_list_a);
 	printf("\n");
+	printf("List A: ");
 	printList(t_list_a);
 
 
