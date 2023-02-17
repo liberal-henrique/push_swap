@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:31:06 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/17 16:15:06 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/17 16:25:28 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -575,29 +575,28 @@ int	give_value_mid(t_node **a)
 int	midpoint(t_node **a, int i)
 {
 	t_node	*temp;
+	int	value;
 
 	temp = cloneList(a);
 	sortList(&temp);
 	i = i/2;
 	while (i-- != 0 && temp->next != NULL)
 		temp = temp->next;
-	return (temp->x);
+	value = temp->x;
+	deallocate(&temp, 0);
+	return (value);
 }
 
 
 void	send_pb(t_node **a, t_node **b, int top, int bottom, int mid_point)
 {
-	// printf("Top: %i\n", top);
-	// printf("bottom: %i\n", bottom);
-	if (top >= bottom)
+	if (top <= bottom)
 	{
 		while (top-- != 0)
-		{
 			ra(a);
-		}
 		pb(b, a);
 	}
-	else if (bottom > top)
+	else if (bottom < top)
 	{
 		while (bottom-- != 0)
 			rra(a);
@@ -616,21 +615,19 @@ void	best_move(t_node **a, t_node **b, int start, int end)
 	int flag;
 	int	mid_point;
 
-	temp = (*a);
 	i = 0.4 * cnt_recursive(*a);
 	if (i > 40)
 		i = 40;
 	mid_point = midpoint(a, i);
-	//printf("MidPoint: %i\n", mid_point);
 	while (*a && i != 0)
 	{
 		flag = 0;
+		temp = (*a);
 		while (temp->next != NULL)
 		{
 			if ((temp->x >= start && temp->x <= end) && flag == 0)
 			{
 				top = temp->x;
-				printf("Topo: %i\n", top);
 				flag = 1;
 			}
 			if (temp->x >= start && temp->x <= end)
@@ -838,6 +835,11 @@ int	main(void)
 	printf("\n");
 	sortList(&t_list_a);
 	printList(t_list_a);
+	printf("\n");
+	printf("\n");
+
+	sortList(&t_list_b);
+	printList(t_list_b);
 
 	deallocate(&t_list_a, 0);
 	return (0);
