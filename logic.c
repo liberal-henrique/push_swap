@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/13 11:31:06 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/24 18:15:47 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/27 11:08:43 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -706,40 +706,124 @@ int	midpoint_chunk(t_node **root, int start_value, int finish_value)
 	return (result);
 }
 
-void	send_pa(t_node **a, t_node **b)
-{
-	t_node *temp;
-	t_node *last;
-	int	big;
-	int	small;
+// int	small(t_node *b)
+// {
+// 	t_node *temp;
+// 	t_node *last;
+// 	int	small;
 
-	temp = *b;
-	last = *b;
-	while (last->next != NULL)
-		last = last->next;
-	big = temp->x ;
-	small = temp->x ;
-	while (temp->next > last->x)
-	{
-		if (big < temp->x)
-			big = temp->x;
-		if (small > temp->x)
-			small = temp->x;
-		temp = temp->next;
-	}
-	midpoint(*b, small, big)
-	while (b->x > last->x)
-	{
-		if (b->x > midpoint)
-			pa(a, b);
-		else
-		{
-			rb(b);
-			big;
-		}
-	}
-}
+// 	temp = *b;
+// 	last = *b;
+// 	while (last->next != NULL)
+// 		last = last->next;
+// 	small = temp->x ;
+// 	while (temp->next > last->x)
+// 	{
+// 		if (small > temp->x)
+// 			small = temp->x;
+// 		temp = temp->next;
+// 	}
+// 	return (small);
+// }
 
+// int	big(t_node *b)
+// {
+// 	t_node *temp;
+// 	t_node *last;
+// 	int	big;
+
+// 	temp = *b;
+// 	last = *b;
+// 	while (last->next != NULL)
+// 		last = last->next;
+// 	big = temp->x ;
+// 	while (temp->next > last->x)
+// 	{
+// 		if (big < temp->x)
+// 			big = temp->x;
+// 		temp = temp->next;
+// 	}
+// 	return (big);
+// }
+
+// void	send_top_b(t_node **a, t_node **b)
+// {
+// 	t_node *temp;
+// 	t_node *last;
+// 	int	n;
+// 	int	i;
+
+// 	temp = *b;
+// 	last = *b;
+// 	while (last->next != NULL)
+// 		last = last->next;
+// 	midpoint = midpoint(*b, small(*b), big(*b));
+// 	n = 0;
+// 	while (b->x > last->x)
+// 	{
+// 		if (b->x > midpoint)
+// 			pa(a, b);
+// 		else
+// 		{
+// 			rb(b);
+// 			n++;
+// 		}
+// 		b = b->next;
+// 	}
+// 	i = 0;
+// 	while (n-- != 0)
+// 	{
+// 		rrb(b);
+// 		i++;
+// 	}
+// }
+
+// void	send_bot_b(t_node **a, t_node **b)
+// {
+// 	t_node *temp;
+// 	t_node *last;
+// 	int	n;
+
+// 	temp = *b;
+// 	last = *b;
+// 	while (last->x < b->x)
+// 		last = last->next;
+// 	midpoint = midpoint(*b, small(last), big(last));
+// 	n = 0;
+// 	while (temp->x != last->x)
+// 	{
+// 		temp = *b;
+// 		while (temp->next != NULL)
+// 			temp = temp->next;
+// 		rrb(b);
+// 		if (b->x > midpoint)
+// 		{
+// 			pa(a, b);
+// 			n++;
+// 		}
+// 	}
+// 	return (n);
+// }
+
+// void rafa_sort_biggest(t_node **a, t_node **b)
+// {
+// 	t_node *temp;
+// 	int	i;
+
+// 	while (cnt_recursive(*a) != 0)
+// 		best_move(a, b, start(a), end(a));
+// 	while (*b)
+// 	{
+// 		temp = *b;
+// 		while (temp->next != NULL)
+// 			temp = temp->next;
+// 		if (b->x > temp->x)
+// 			tuafuncao(send_top_b(a, b));
+// 		else if (b->x < temp->x)
+// 			send_bot_b(a, b);
+// 		//tratar stack A
+// 	}
+// }
 
 void	sort_biggest(t_node **a, t_node **b)
 {
@@ -785,109 +869,51 @@ void	sort_biggest(t_node **a, t_node **b)
 
 }
 
-int	find_biggest_chunks_in_a(t_node **root, int moviments_stop)
-{
-	t_node	*temp;
-	int		biggest;
+// int	find_biggest_chunks_in_a(t_node **root, int value_stop)
+// {
+// 	t_node	*temp;
+// 	int		biggest;
 
-	temp = (*root);
-	biggest = 0;
-	while (moviments_stop != 0)
-	{
-		moviments_stop--;
-		if (temp->x < temp->next->x)
-			biggest = temp->next->x;
-		temp = temp->next;
-	}
-	return (biggest);
-}
-int	find_smallest_chunks_in_a(t_node **root)
-{
-	t_node	*temp;
-	int		smallest;
+// 	temp = (*root);
+// 	biggest = 0;
+// 	while (temp->next != NULL)
+// 	{
+// 		if (temp->x == value_stop)
+// 			break;
+// 		if (temp->x < temp->next->x && temp->next->x != )
+// 			biggest = temp->next->x;
+// 		temp = temp->next;
+// 	}
+// 	return (biggest);
+// }
 
-	temp = (*root);
-	smallest = 0;
-	while (temp->next != NULL)
-	{
-		if (temp->x > temp->next->x)
-			smallest = temp->next->x;
-		temp = temp->next;
-	}
-	return (smallest);
-}
+// int	find_smallest_chunks_in_a(t_node **root, t_node *value_pause)
+// {
+// 	t_node	*temp;
+// 	int		smallest;
 
-// range aqui sera o numero de elementos
-//recebidos em A
-void	sort_chunks_in_a(t_node **a, t_node **b, int range)
-{
-	t_node	*tmp;
-	int	mid_point;
-	int	biggest;
-	int	smallest;
-	int	control_ra;
-	int	control_pb;
-	int	control_range;
+// 	temp = (*root);
+// 	smallest = 0;
+// 	while (temp->next != NULL)
+// 	{
+// 		if (temp->x > temp->next->x)
+// 			smallest = temp->next->x;
+// 		temp = temp->next;
+// 	}
+// 	return (smallest);
+// }
 
-	tmp = (*a);
-	control_ra = 0;
-	control_pb = 0;
-	control_range = range;
-	biggest = find_biggest_chunks_in_a(a, range);
-	smallest = find_smallest_chunks_in_a(a);
-	mid_point = midpoint_chunk(a, smallest, biggest);
-	while (range > 3)
-	{
-		if (tmp->x >= mid_point)
-		{
-			control_ra++;
-			ra(a);
-		}
-		if (tmp->x < mid_point)
-		{
-			control_pb++;
-			pb(b, a);
-			if ((*b)->x < (*b)->next->x)
-				sb(b);
-		}
-		range--;
-	}
-	while (range != control_range)
-	{
-		while (control_ra-- != 0)
-		{
-			mid_point = midpoint_chunk(a, smallest, biggest);
-			if (range == 3)
-			{
-				if (list_sorted(a))
-					break ;
-				if (tmp->x < mid_point)
-				{
-					pb(b, a);
-					break ;
-				}
-				sa(a);
-				if (list_sorted(a))
-					break ;
-				if (tmp->x < mid_point)
-				{
-					pb(b, a);
-					break ;
-				}
-			}
-			if (!(list_sorted(a)))
-				sa(a);
-			rra(a);
-		}
-		while (control_pb-- != 0)
-		{
-			pa(a, b);
-			range++;
-		}
-	}
-	//terminarei com 3 elementos
 
-}
+// void	sort_chunks_in_a(t_node **a)
+// {
+// 	int	mid_point;
+// 	int	biggest;
+// 	int	smallest;
+
+// 	biggest = find_biggest_chunks_in_a(a, );
+// 	smallest = find_smallest_chunks_in_a(a, );
+// 	mid_point = midpoint_chunk(a, smallest, biggest);
+// }
 
 
 
