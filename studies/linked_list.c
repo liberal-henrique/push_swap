@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 16:07:26 by lliberal          #+#    #+#             */
-/*   Updated: 2023/01/20 14:41:35 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/02/15 17:24:21 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void  reverse(Node** root)
   *root = prev;
 }
 
-int	count(Node* root)
+int	count(Node *root)
 {
 	Node	*curr;
 	int		i;

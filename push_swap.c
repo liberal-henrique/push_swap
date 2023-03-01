@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:55:36 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/13 15:01:44 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/03/01 19:49:10 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char		**ft_split(char const *s, char c);
 int			word_count(const char *sr, char delimiter);
 void		add_split(char **dst, const char *string, char delimiter);
 void		freeAll(char **result);
-t_node		*initialize_list_link(char **argv, t_node *t_list_a);
+t_node		*initialize_list(char **argv, t_node *t_list_a);
 void		print_array_2d(char **arr_bidimensional);
 t_node		*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter);
 void		printList(t_node *root);
@@ -48,7 +48,7 @@ int	main(int argc, char **argv)
 	t_list_a = NULL;
 	if (argc < 2)
 		return (0);
-	t_list_a = initialize_list_link(argv + 1, t_list_a);
+	t_list_a = initialize_list(argv + 1, t_list_a);
 	if (list_sorted(&t_list_a) == 1 && count_items(t_list_a) > 1)
 		deallocate(&t_list_a, 1);
 	printList(t_list_a);
@@ -85,7 +85,7 @@ int	count_items(t_node	*root)
 	return (i);
 }
 
-t_node	*initialize_list_link(char **argv, t_node *t_list_a)
+t_node	*initialize_list(char **argv, t_node *t_list_a)
 {
 	int		i;
 	int		j;
@@ -228,6 +228,7 @@ void	printList(t_node *root)
 		if (curr->next == NULL)
 		{
 			printf("[*][%ld]", (long int)curr->content);
+			printf("\n");
 			break ;
 		}
 		printf("[*][%ld]->", (long int)curr->content);

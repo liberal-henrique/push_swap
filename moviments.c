@@ -6,249 +6,154 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 11:32:24 by lliberal          #+#    #+#             */
-/*   Updated: 2023/02/10 14:22:48 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/03/01 18:52:39 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "./push_swap.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+#include "./push_swap.h"
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <string.h>
+// #include <unistd.h>
 
-typedef struct s_node
+
+void	sa(t_list **a)
 {
-	int				content;
-	struct s_node	*next;
-}					t_node;
+	t_list	*second;
 
-void	insert_end(t_node **root, int value)
-{
-	t_node	*new_node;
-	t_node	*curr;
-
-	new_node = (t_node *)malloc(sizeof(t_node));
-	if (new_node == NULL)
+	if (!*a)
 		return ;
-	new_node->content = value;
-	new_node->next = NULL;
-	if (*root == NULL)
-	{
-		new_node->next = *root;
-		*root = new_node;
+	second = (*a)->next;
+	(*a)->next = second->next;
+	second->next = *a;
+	*a = second;
+	write(1, "sa\n", 3);
+}
+
+void	sb(t_list **b)
+{
+	t_list	*second;
+
+	if (!*b)
 		return ;
-	}
-	curr = *root;
-	while (curr->next)
-	{
-		curr = curr->next;
-	}
-	curr->next = new_node;
+	second = (*b)->next;
+	(*b)->next = second->next;
+	second->next = *b;
+	*b = second;
+	write(1, "sb\n", 3);
 }
 
-void	printList(t_node *root)
+void	ss(t_list **a, t_list **b)
 {
-	t_node	*curr;
-
-	curr = root;
-	while (curr != NULL)
-	{
-		if (curr->next == NULL)
-		{
-			printf("[*][%ld]", (long int)curr->content);
-			break ;
-		}
-		printf("[*][%ld]->", (long int)curr->content);
-		curr = curr->next;
-	}
+	sa(a);
+	sb(b);
+	write(1, "ss\n", 3);
 }
 
-void	deallocate(t_node **root, int message)
+void	pa(t_list **a, t_list **b)
 {
-	t_node	*temp;
+	t_list	*curr;
 
-	while (*root)
-	{
-		temp = (*root)->next;
-		free(*root);
-		*root = temp;
-	}
-	root = NULL;
-	if (message == 1)
-		exit(write(1, "errorDeallo\n", 12));
-}
-
-void	sa(t_node **t_list_a)
-{
-	t_node	*second;
-
-	if (!*t_list_a)
+	if (!*b)
 		return ;
-	second = (*t_list_a)->next;
-	(*t_list_a)->next = second->next;
-	second->next = *t_list_a;
-	*t_list_a = second;
+	curr = *b;
+	*b = curr->next;
+	curr->next = *a;
+	*a = curr;
+	write(1, "pa\n", 3);
 }
 
-void	sb(t_node **t_list_b)
+void	pb(t_list **b, t_list **a)
 {
-	t_node	*second;
+	t_list	*curr;
 
-	if (!*t_list_b)
+	if (!a)
 		return ;
-	second = (*t_list_b)->next;
-	(*t_list_b)->next = second->next;
-	second->next = *t_list_b;
-	*t_list_b = second;
+	curr = *a;
+	*a = curr->next;
+	curr->next = *b;
+	*b = curr;
+	write(1, "pb\n", 3);
 }
 
-void	ss(t_node **t_list_a, t_node **t_list_b)
+void	ra(t_list **a)
 {
-	sa(t_list_a);
-	sb(t_list_b);
-}
+	t_list	*curr;
+	t_list	*temp;
 
-void	pa(t_node **t_list_a, t_node **t_list_b)
-{
-	t_node	*curr;
-
-	if (!*t_list_b)
+	if (!*a)
 		return ;
-	curr = *t_list_b;
-	*t_list_b = curr->next;
-	curr->next = *t_list_a;
-	*t_list_a = curr;
-}
-
-void	pb(t_node **t_list_b, t_node **t_list_a)
-{
-	t_node	*curr;
-
-	if (!t_list_a)
-		return ;
-	curr = *t_list_a;
-	*t_list_a = curr->next;
-	curr->next = *t_list_b;
-	*t_list_b = curr;
-}
-
-void	ra(t_node **t_list_a)
-{
-	t_node	*curr;
-	t_node	*temp;
-
-	if (!*t_list_a)
-		return ;
-	curr = *t_list_a;
-	temp = *t_list_a;
-	*t_list_a = curr->next;
+	curr = *a;
+	temp = *a;
+	*a = curr->next;
 	while (curr->next != NULL)
 		curr = curr->next;
 	curr->next = temp;
 	temp->next = NULL;
+	write(1, "ra\n", 3);
 }
 
-void	rb(t_node **t_list_b)
+void	rb(t_list **b)
 {
-	t_node	*curr;
-	t_node	*temp;
+	t_list	*curr;
+	t_list	*temp;
 
-	if (!*t_list_b)
+	if (!*b)
 		return ;
-	curr = *t_list_b;
-	temp = *t_list_b;
-	*t_list_b = curr->next;
+	curr = *b;
+	temp = *b;
+	*b = curr->next;
 	while (curr->next != NULL)
 		curr = curr->next;
 	curr->next = temp;
 	temp->next = NULL;
+	write(1, "rb\n", 3);
 }
 
-void	rr(t_node **t_list_a ,t_node **t_list_b)
+void	rr(t_list **a ,t_list **b)
 {
-	ra(t_list_a);
-	rb(t_list_b);
+	ra(a);
+	rb(b);
+	write(1, "rr\n", 3);
 }
 
-void	rra(t_node **t_list_a)
+void	rra(t_list **a)
 {
-	t_node	*curr;
-	t_node	*before_last;
+	t_list	*curr;
+	t_list	*before_last;
 
-	curr = *t_list_a;
-	before_last = *t_list_a;
+	curr = *a;
+	before_last = *a;
 	while (curr->next != NULL)
 		curr = curr->next;
 	while (before_last->next != curr)
 		before_last = before_last->next;
-	curr->next = *t_list_a;
-	*t_list_a = curr;
+	curr->next = *a;
+	*a = curr;
 	before_last->next = NULL;
+	write(1, "rra\n", 4);
 }
 
-void	rrb(t_node **t_list_b)
+void	rrb(t_list **b)
 {
-	t_node	*curr;
-	t_node	*before_last;
+	t_list	*curr;
+	t_list	*before_last;
 
-	curr = *t_list_b;
-	before_last = *t_list_b;
+	curr = *b;
+	before_last = *b;
 	while (curr->next != NULL)
 		curr = curr->next;
 	while (before_last->next != curr)
 		before_last = before_last->next;
-	curr->next = *t_list_b;
-	*t_list_b = curr;
+	curr->next = *b;
+	*b = curr;
 	before_last->next = NULL;
+	write(1, "rrb\n", 4);
 }
 
-void	rrr(t_node **t_list_a, t_node **t_list_b)
+void	rrr(t_list **a, t_list **b)
 {
-	rra(t_list_a);
-	rrb(t_list_b);
-}
-
-int	main(void)
-{
-	t_node	*t_list_a;
-	t_node	*t_list_b;
-
-	t_list_a = NULL;
-	t_list_b = NULL;
-	insert_end(&t_list_a, 5);
-	insert_end(&t_list_a, 4);
-	insert_end(&t_list_a, 8);
-	insert_end(&t_list_a, 9);
-	insert_end(&t_list_a, 10);
-	//------------------------------------------
-	insert_end(&t_list_b, 12);
-	insert_end(&t_list_b, 14);
-	insert_end(&t_list_b, 16);
-	insert_end(&t_list_b, 17);
-	insert_end(&t_list_b, 19);
-	printList(t_list_a);
-	printf("\n");
-	printList(t_list_b);
-
-
-	printf("\n");
-
-	//Here the code to change the lists
-
-	printf("\n");
-	printf("\n");
-	printf("\n");
-	printf("\n");
-
-
-	printf("List A: ");
-	printList(t_list_a);
-	printf("\n");
-	printf("List B: ");
-	printList(t_list_b);
-
-
-
-	deallocate(&t_list_a, 0);
-	return (0);
+	rra(a);
+	rrb(b);
+	write(1, "rrr\n", 4);
 }

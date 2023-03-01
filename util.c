@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 16:31:28 by lliberal          #+#    #+#             */
-/*   Updated: 2023/01/30 11:00:05 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/03/01 18:54:46 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,35 +70,31 @@ int	ft_atoi(const char *str)
 	return (res * sign);
 }
 
-static char	**split_recursive(char **result, char *str, int cnt_strings, char c)
+int		list_sorted(t_list **root)
 {
-	int		index;
-	char	*keep_parts;
+	t_list	*curr;
 
-	index = 0;
-	keep_parts = NULL;
-	while (*str == c)
-		str++;
-	while (str[index] != c && str[index])
-		index++;
-	if (index > 0)
-		keep_parts = malloc(sizeof(char) * (index + 1));
-	index = 0;
-	while (keep_parts && *str != c && *str)
-		keep_parts[index++] = *str++;
-	if (*str == c)
-		keep_parts[index] = '\0';
-	if (keep_parts)
-		result = split_recursive(result, str, cnt_strings + 1, c);
-	else
-		result = malloc(sizeof(char *) * (cnt_strings + 1));
-	if (result)
-		result[cnt_strings] = keep_parts;
-	free(keep_parts);
-	return (result);
+	curr = *root;
+	while (curr->next)
+	{
+		if (curr->x > curr->next->x)
+			return (0);
+		curr = curr->next;
+	}
+	return (1);
 }
 
-char	**ft_split(char const *s, char c)
+void	deallocate(t_list **root, int message)
 {
-	return (split_recursive(0, (char *)s, 0, c));
+	t_list	*temp;
+
+	while (*root)
+	{
+		temp = (*root)->next;
+		free(*root);
+		*root = temp;
+	}
+	*root = NULL;
+	if (message == 1)
+		exit(write(1, "errorDeallo\n", 12));
 }

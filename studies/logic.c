@@ -1,14 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   logic2.c                                           :+:      :+:    :+:   */
+/*   logic.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/16 18:18:34 by rasantos          #+#    #+#             */
-/*   Updated: 2023/02/22 19:01:25 by lliberal         ###   ########.fr       */
+/*   Created: 2023/02/13 11:31:06 by lliberal          #+#    #+#             */
+/*   Updated: 2023/03/01 16:10:26 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+//Sorting three elements
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -95,7 +97,7 @@ void	sa(t_node **t_list_a)
 	(*t_list_a)->next = second->next;
 	second->next = *t_list_a;
 	*t_list_a = second;
-	write(1, "sa\n", 3);
+	//write(1, "sa\n", 3);
 }
 
 void	sb(t_node **t_list_b)
@@ -108,7 +110,7 @@ void	sb(t_node **t_list_b)
 	(*t_list_b)->next = second->next;
 	second->next = *t_list_b;
 	*t_list_b = second;
-	write(1, "sb\n", 3);
+	//write(1, "sb\n", 3);
 }
 
 void	ss(t_node **t_list_a, t_node **t_list_b)
@@ -128,7 +130,7 @@ void	pa(t_node **t_list_a, t_node **t_list_b)
 	*t_list_b = curr->next;
 	curr->next = *t_list_a;
 	*t_list_a = curr;
-	write(1, "pa\n", 3);
+	//write(1, "pa\n", 3);
 }
 
 void	pb(t_node **t_list_b, t_node **t_list_a)
@@ -209,7 +211,7 @@ void	rrb(t_node **t_list_b)
 	curr->next = *t_list_b;
 	*t_list_b = curr;
 	before_last->next = NULL;
-	write(1, "rrb\n", 4);
+	//write(1, "rrb\n", 4);
 }
 
 void	rrr(t_node **t_list_a, t_node **t_list_b)
@@ -562,11 +564,11 @@ void	send_pb(t_node **a, t_node **b, int top, int bottom, int mid_point)
 		rb(b);
 }
 
-int	rangevalue(t_node **a, int end)
+int	numero_movi(t_node **a, int end)
 {
 	t_node *temp;
 	int	i;
-	
+
 	temp = cloneList(a);
 	sortList(&temp);
 	i = 1;
@@ -583,7 +585,7 @@ int	start(t_node **a)
 {
 	t_node *temp;
 	int	start;
-	
+
 	temp = cloneList(a);
 	sortList(&temp);
 	start = temp->x;
@@ -595,15 +597,15 @@ int	end(t_node **a)
 {
 	t_node *temp;
 	int	end;
-	
+
 	temp = cloneList(a);
 	sortList(&temp);
 	end = 0;
 	while (temp->next != NULL && end != 29)
-    {
-        end++;
-        temp = temp->next;
-    }
+	{
+		end++;
+		temp = temp->next;
+	}
 	end = temp->x;
 	deallocate(&temp, 0);
 	return (end);
@@ -618,7 +620,7 @@ void	best_move(t_node **a, t_node **b, int start, int end)
 	int flag;
 	int	mid_point;
 
-	i = rangevalue(a, end);
+	i = numero_movi(a, end);
 	mid_point = midpoint(a, i);
 	while (*a && i != 0)
 	{
@@ -640,53 +642,618 @@ void	best_move(t_node **a, t_node **b, int start, int end)
 	}
 }
 
-void	sort_biggest(t_node **a, t_node **b)
+int	sort_biggest_chunks_in_b(t_node **root)
 {
-    t_node *bot;
-    t_node *top;
-    int biggest;
-    int i;
-    
-    bot = *b;
-    top = *b;
-	while (cnt_recursive(*a) != 0)
-		best_move(a, b, start(a), end(a));
-    while (bot->next != NULL && *b)
-        bot = bot->next;
-    while (*b)
-    {
-        biggest = top->x;
-        while (top->x > bot->x)
-        {
-            if (biggest < top->x)
-                biggest = top->x;
-            top = top->next;
-        }
-        while (b->x != biggest)
-            rb(b);
-        pa(a, b);
-        biggest = bot->x;
-        while (top->x < bot->x)
-        {
-            if (biggest < bot->x)
-                biggest = bot->x;
-            while (bot->next != NULL && *b)
-                bot = bot->next;
-        }
-        while (b->x != biggest)
-            rrb(b);
-        rrb(b);
-        pa(a, b);
-    }
+	t_node	*last_value;
+	t_node	*temp;
+	int	biggest;
+
+	last_value = (*root);
+	temp = (*root);
+	biggest = 0;
+	while (last_value->next != NULL)
+		last_value = last_value->next;
+	while (temp->next != NULL)
+	{
+		if (temp->x < last_value->x)
+			break;
+		if (temp->x < temp->next->x)
+			biggest = temp->next->x;
+		temp = temp->next;
+	}
+	return (biggest);
+}
+
+int	midpoint_chunk(t_node **root, int start_value, int finish_value)
+{
+	t_node	*temp;
+	t_node	*last;
+	int		index_first;
+	int		index_last;
+	int		mid;
+	int		result;
+
+	temp = cloneList(root);
+	sortList(&temp);
+	last = temp;
+	index_first = 0;
+	index_last = 0;
+	result = 0;
+	while (temp->next != NULL)
+	{
+		if (temp->x == start_value)
+			break;
+		index_first++;
+		temp = temp->next;
+	}
+	while (last->next != NULL)
+	{
+		if (last->x == finish_value)
+			break;
+		index_last++;
+		last = last->next;
+	}
+	mid = (index_last - index_first) / 2;
+	while (mid != 0)
+	{
+		mid--;
+		temp = temp->next;
+	}
+	result = temp->x;
+	deallocate(&temp, 0);
+	return (result);
+}
+
+int	b_small(t_node *b)
+{
+	t_node *temp;
+	t_node *last;
+	int	small;
+
+	temp = b;
+	last = b;
+	while (last->next != NULL)
+		last = last->next;
+	small = temp->x ;
+	while (temp->next->x > last->x)
+	{
+		if (small > temp->x)
+			small = temp->x;
+		temp = temp->next;
+	}
+	return (small);
+}
+
+int	b_big(t_node *b)
+{
+	t_node *temp;
+	t_node *last;
+	int	big;
+
+	temp = b;
+	last = b;
+	while (last->next != NULL)
+		last = last->next;
+	big = temp->x;
+	while (temp->x > last->x)
+	{
+		if (big < temp->x)
+			big = temp->x;
+		temp = temp->next;
+	}
+	return (big);
+}
+
+int	find_biggest_chunks_in_a(t_node **root, int n_moviments)
+{
+	t_node	*temp;
+	int		biggest;
+
+	temp = (*root);
+	biggest = temp->x;
+	while ( --n_moviments > 0)
+	{
+		if (biggest < temp->next->x)
+			biggest = temp->next->x;
+		temp = temp->next;
+	}
+	return (biggest);
+}
+
+int	find_smallest_chunks_in_a(t_node **root)
+{
+	t_node	*temp;
+	int		smallest;
+
+	temp = *root;
+	smallest = 0;
+	while (temp->next != NULL)
+	{
+		if (temp->x > temp->next->x)
+			smallest = temp->next->x;
+		temp = temp->next;
+	}
+	return (smallest);
+}
+
+void	sort_3_in_a(t_node **a, t_node **b)
+{
+	int	mid_pnt;
+	
+	if (list_sorted(a))
+		return ;
+	mid_pnt = midpoint_chunk(a, 97, 99);
+	if ((*a)->x > mid_pnt)
+		sa(a);
+	if (list_sorted(a))
+		return ;
+	if ((*a)->x <= mid_pnt)
+	{
+		if ((*a)->next->x < mid_pnt)
+			sa(a);
+		pb(b, a);
+	}
+	if (list_sorted(a))
+		return ;
+	if (!(list_sorted(a)))
+		sa(a);
+	pa(a, b);
+}
+
+void	back_ra(t_node **a, int n_control)
+{
+
+	if (cnt_recursive(*a) <= 2 && list_sorted(a))
+		return ;
+	while (n_control-- != 0)
+		rra(a);
+}
+
+void	back_pb(t_node **a, t_node **b, int n_control)
+{
+	while (n_control-- != 0)
+		pa(a, b);
+}
+
+void	sort_in_a(t_node **a, t_node **b, int n_moviments)
+{
+	t_node	*last;
+	int	tmp;
+	int	biggest;
+	int	smallest;
+	int	mid_pnt;
+	int	ra_control;
+	int	pb_control;
+
+	sb(b);
+	pa(a, b);
+	pa(a, b);
+	tmp = n_moviments;
+	ra_control = 0;
+	pb_control = 0;
+	last = (*a);
+	while (--tmp != 0)
+		last = last->next;
+	biggest = find_biggest_chunks_in_a(a, n_moviments);
+	smallest = find_smallest_chunks_in_a(a);
+	mid_pnt = midpoint_chunk(a, smallest, biggest);
+	while (n_moviments >= 2)
+	{
+		if (n_moviments <= 2 && !(list_sorted(a)))
+			{
+				sa(a);
+				break ;
+			}
+		if ((*a)->x > mid_pnt)
+		{
+			ra(a);
+			n_moviments--;
+			ra_control++;
+			if (n_moviments <= 2 && !(list_sorted(a)))
+			{
+				sa(a);
+				break ;
+			}
+		}
+		else if ((*a)->x <= mid_pnt)
+		{
+			pb(b, a);
+			n_moviments--;
+			pb_control++;
+			if (n_moviments <= 2)
+			{
+				if (list_sorted(a))
+					break ;
+				sa(a);
+			}
+		}
+	}
+	back_ra(a, ra_control);
+	back_pb(a, b, pb_control);
+	
+	// Eu acho que casos em que eu receba numeros desordenados de pb
+	//eu poderia tratar disso aqui
+	// talvez eu encontre algum numero de movimentos que eu possa fornecer
+	// menor assim garantirei que a minha funcao nao ficara em um loop eterno
+	// if (!(list_sorted(a)))
+	// 	sort_in_a(a, b, (n_moviments-2));
+}
+
+void	sort_in_a_2(t_node **a, t_node **b, int n_moviments)
+{
+	t_node	*last;
+	int	tmp;
+	int	biggest;
+	int	smallest;
+	int	mid_pnt;
+	int	ra_control;
+	int	pb_control;
+
+	tmp = n_moviments;
+	ra_control = 0;
+	pb_control = 0;
+	last = (*a);
+	while (--tmp != 0)
+		last = last->next;
+	biggest = find_biggest_chunks_in_a(a, n_moviments);
+	smallest = find_smallest_chunks_in_a(a);
+	mid_pnt = midpoint_chunk(a, smallest, biggest);
+	while (n_moviments >= 1)
+	{
+		if ((*a)->x > mid_pnt)
+		{
+			ra(a);
+			n_moviments--;
+			ra_control++;
+		}
+		else if ((*a)->x <= mid_pnt)
+		{
+			pb(b, a);
+			n_moviments--;
+			pb_control++;
+		}
+	}
+	back_ra(a, ra_control);
+	back_pb(a, b, pb_control);
+	if (!(list_sorted(a)))
+	{
+		sort_in_a_2(a, b, pb_control);
+	}
+}
+
+void	sort_in_a_3(t_node **a, t_node **b, int n_moviments)
+{
+	t_node	*last;
+	int	tmp;
+	int	biggest;
+	int	smallest;
+	int	mid_pnt;
+	int	ra_control;
+	int	pb_control;
+
+	tmp = n_moviments;
+	ra_control = 0;
+	pb_control = 0;
+	last = (*a);
+	while (--tmp != 0)
+		last = last->next;
+	biggest = find_biggest_chunks_in_a(a, n_moviments);
+	smallest = find_smallest_chunks_in_a(a);
+	mid_pnt = midpoint_chunk(a, smallest, biggest);
+	printf("mid_pnt: %i\n", mid_pnt);
+	while (n_moviments >= 1)
+	{
+		if ((*a)->x > mid_pnt)
+		{
+			printf("Ra no valor: %i\n", (*a)->x);
+			ra(a);
+			n_moviments--;
+			ra_control++;
+		}
+		else if ((*a)->x <= mid_pnt)
+		{
+			printf("PB no valor: %i\n", (*a)->x);
+			pb(b, a);
+			n_moviments--;
+			pb_control++;
+		}
+	}
+	back_ra(a, ra_control);
+	//Eu tive de colocar esse sa aqui pois
+	//o 88 e o 89 voltavam de baixo desordenados
+	if (!(list_sorted(a)))
+		sa(a);
+	back_pb(a, b, pb_control);
+	if (!(list_sorted(a)))
+		sort_in_a_2(a, b, pb_control);
+}
+
+void	sort_in_a_4(t_node **a, t_node **b, int n_moviments)
+{
+	t_node	*last;
+	int	tmp;
+	int	biggest;
+	int	smallest;
+	int	mid_pnt;
+	int	ra_control;
+	int	pb_control;
+
+	tmp = n_moviments;
+	ra_control = 0;
+	pb_control = 0;
+	last = (*a);
+	while (--tmp != 0)
+		last = last->next;
+	biggest = find_biggest_chunks_in_a(a, n_moviments);
+	smallest = find_smallest_chunks_in_a(a);
+	mid_pnt = midpoint_chunk(a, smallest, biggest);
+	printf("mid_pnt: %i\n", mid_pnt);
+	while (n_moviments >= 1)
+	{
+		if ((*a)->x > mid_pnt)
+		{
+			printf("Ra no valor: %i\n", (*a)->x);
+			ra(a);
+			n_moviments--;
+			ra_control++;
+		}
+		else if ((*a)->x <= mid_pnt)
+		{
+			printf("PB no valor: %i\n", (*a)->x);
+			pb(b, a);
+			n_moviments--;
+			pb_control++;
+		}
+	}
+	back_ra(a, ra_control);
+	//Eu tive de colocar esse sa aqui pois
+	//o 88 e o 89 voltavam de baixo desordenados
+	if (!(list_sorted(a)))
+		sa(a);
+	back_pb(a, b, pb_control);
+	if (!(list_sorted(a)))
+	{
+		sort_in_a_2(a, b, pb_control);
+	}
+}
+
+void	sort_in_a_5(t_node **a, t_node **b, int n_moviments)
+{
+	t_node	*last;
+	int	tmp;
+	int	biggest;
+	int	smallest;
+	int	mid_pnt;
+	int	ra_control;
+	int	pb_control;
+
+	tmp = n_moviments;
+	ra_control = 0;
+	pb_control = 0;
+	last = (*a);
+	while (--tmp != 0)
+		last = last->next;
+	biggest = find_biggest_chunks_in_a(a, n_moviments);
+	smallest = find_smallest_chunks_in_a(a);
+	mid_pnt = midpoint_chunk(a, smallest, biggest);
+	while (n_moviments >= 1)
+	{
+		if ((*a)->x > mid_pnt)
+		{
+			ra(a);
+			ra_control++;
+		}
+		else if ((*a)->x <= mid_pnt)
+		{
+			pb(b, a);
+			pb_control++;
+		}
+		n_moviments--;
+	}
+	back_ra(a, ra_control);
+	if (!(list_sorted(a)))
+		sort_in_a_5(a, b, ra_control);
+	back_pb(a, b, pb_control);
+	if (!(list_sorted(a)))
+		sort_in_a_5(a, b, pb_control);
+}
+
+int	top_small(t_node *b)
+{
+	t_node *temp;
+	t_node *last;
+	int	small;
+
+	temp = b;
+	last = b;
+	while (last->next != NULL)
+		last = last->next;
+	small = temp->x ;
+	while (temp->x > last->x)
+	{
+		if (small > temp->x)
+			small = temp->x;
+		temp = temp->next;
+	}
+	return (small);
+}
+
+int	top_big(t_node *b)
+{
+	t_node *temp;
+	t_node *last;
+	int	big;
+
+	temp = b;
+	last = b;
+	while (last->next != NULL)
+		last = last->next;
+	big = temp->x;
+	while (temp->x > last->x)
+	{
+		if (big < temp->x)
+			big = temp->x;
+		temp = temp->next;
+	}
+	return (big);
+}
+
+int	send_rest(t_node **a, t_node **b)
+{
+	t_node *last;
+	int	mid_point;
+	int	small;
+	int	big;
+	int	n;
+	
+	last = *b;
+	small = last->x;
+	big = last->x;
+	n = 0;
+	while (last->next != NULL)
+	{
+		if (small > last->next->x)
+			small = last->next->x;
+		if (big < last->next->x)
+			big = last->next->x;
+		last = last->next;
+	}
+	mid_point = midpoint_chunk(b, small, big);
+	while ((*b)->x != last->x)
+	{
+		if ((*b)->x > mid_point)
+		{
+			pa(a, b);
+			n++;
+		}
+		else if ((*b)->x <= mid_point)
+			rb(b);
+	}
+	if ((*b)->x > mid_point)
+	{
+		pa(a, b);
+		n++;
+	}
+	return (n);
+}
+
+void	send_top_b(t_node **a, t_node **b)
+{
+	t_node *last;
+	int	i;
+	int	n;
+	int	mid_point;
+	
+	last = *b;
+	n = 0;
+	i = 0;
+	while (last->next != NULL)
+		last = last->next;
+	mid_point = midpoint_chunk(b, top_small(*b), top_big(*b));
+	while ((*b)->x > last->x && (*b))
+	{
+		if ((*b)->x >= mid_point && ++i)
+			pa(a, b);
+		else if ((*b)->x < mid_point && ++n)
+			rb(b);
+	}
+	while (n-- != 0)
+		rrb(b);
+}
+
+int	bot_small(t_node *b)
+{
+	t_node *temp;
+	int	small;
+
+	temp = b;
+	small = temp->x;
+	while (temp->next != NULL)
+	{
+		if (small > temp->x)
+			small = temp->x;
+		temp = temp->next;
+	}
+	return (small);
+}
+
+int	bot_big(t_node *b)
+{
+	t_node *temp;
+	int	big;
+
+	temp = b;
+	big = temp->x;
+	while (temp->next != NULL)
+	{
+		if (big < temp->x)
+			big = temp->x;
+		temp = temp->next;
+	}
+	return (big);
+}
+
+int	send_bot_b(t_node **a, t_node **b)
+{
+	t_node *temp;
+	t_node *last;
+	int	n;
+	int	mid_point;
+
+	temp = *b;
+	last = *b;
+	n = 0;
+	mid_point = 0;
+	while (last->next != NULL)
+	{
+		last = last->next;
+		mid_point++;
+		if (last->x > (*b)->x)
+			n++;
+		else
+			n = 0;	printf("List A: ");
+	printList(*a);
+	printf("\n");
+	return (i);
+	}
+	last = *b;
+	while (last->next != NULL && mid_point-- >= n)
+		last = last->next;
+	mid_point = midpoint_chunk(b, bot_small(last), bot_big(last));
+	n = 0;
+	while (temp->x != last->x && (*b))
+	{
+		temp = *b;
+		while (temp->next != NULL)
+			temp = temp->next;
+		rrb(b);
+		if ((*b)->x > mid_point)
+		{
+			pa(a, b);
+			n++;
+		}
+	}
+	return (n);
+}
+
+int	send_remains(t_node **a, t_node **b, int n)
+{
+	int	i;
+
+	i = 0;
+	while (n-- != 0 && (*b))
+	{
+		pa(a, b);
+		i++;
+	}
+	return (i);
 }
 
 int	main(void)
 {
-	//int	count;
 	t_node	*t_list_a;
 	t_node	*t_list_b;
 
-	//count = 100;
 	t_list_a = NULL;
 	t_list_b = NULL;
 	insert_end(&t_list_a, 36);
@@ -708,6 +1275,7 @@ int	main(void)
 	insert_end(&t_list_a, 0);
 
 	insert_end(&t_list_a, 76);
+
 	insert_end(&t_list_a, 77);
 	insert_end(&t_list_a, 90);
 	insert_end(&t_list_a, 1);
@@ -774,7 +1342,6 @@ int	main(void)
 	insert_end(&t_list_a, 66);
 	insert_end(&t_list_a, 40);
 	insert_end(&t_list_a, 34);
-
 	insert_end(&t_list_a, 99);
 	insert_end(&t_list_a, 43);
 	insert_end(&t_list_a, 84);
@@ -803,50 +1370,73 @@ int	main(void)
 	insert_end(&t_list_a, 19);
 	insert_end(&t_list_a, 17);
 	insert_end(&t_list_a, 12);
-
 	insert_end(&t_list_a, 8);
 	insert_end(&t_list_a, 71);
 	insert_end(&t_list_a, 9);
 	insert_end(&t_list_a, 3);
 	insert_end(&t_list_a, 11);
 
-	//Primeiro mid value 51
-	//Segundo mid value 76
-	// terceiro mid value 89
-	// Quarto mid value 95
-	// Quarto mid value 98
-	// sorted 3
-
-
 	//------------------------------------------
 
-	sort_biggest(&t_list_a, &t_list_b);
+	int movs;
 
+	movs = 0;
+	printf("\n");
+	while (cnt_recursive(t_list_a) != 0)
+		best_move(&t_list_a, &t_list_b, start(&t_list_a), end(&t_list_a));
+
+	movs = send_top_b(&t_list_a, &t_list_b);
+	printf("Movs: %i\n", movs);
+	sort_in_a_5(&t_list_a, &t_list_b, movs);
+	sort_in_a_5(&t_list_a, &t_list_b, send_remains(&t_list_a, &t_list_b, movs - 1));
+
+	movs = send_bot_b(&t_list_a, &t_list_b);
+	printf("Movs: %i\n", movs);
+	sort_in_a_5(&t_list_a, &t_list_b, movs);
+	sort_in_a_5(&t_list_a, &t_list_b, send_remains(&t_list_a, &t_list_b, movs + 1));
+
+	movs = send_top_b(&t_list_a, &t_list_b);
+	printf("Movs: %i\n", movs);
+	sort_in_a_5(&t_list_a, &t_list_b, movs);
+	sort_in_a_5(&t_list_a, &t_list_b, send_remains(&t_list_a, &t_list_b, movs - 1));
+
+	movs = send_bot_b(&t_list_a, &t_list_b);
+	printf("Movs: %i\n", movs);
+	sort_in_a_5(&t_list_a, &t_list_b, movs);
+	sort_in_a_5(&t_list_a, &t_list_b, send_remains(&t_list_a, &t_list_b, movs + 1));
+	
+	movs = send_top_b(&t_list_a, &t_list_b);
+	printf("Movs: %i\n", movs);
+	sort_in_a_5(&t_list_a, &t_list_b, movs);
+	sort_in_a_5(&t_list_a, &t_list_b, send_remains(&t_list_a, &t_list_b, movs - 1));
+
+	movs = send_bot_b(&t_list_a, &t_list_b);
+	printf("Movs: %i\n", movs);
+	sort_in_a_5(&t_list_a, &t_list_b, movs);
+	sort_in_a_5(&t_list_a, &t_list_b, send_remains(&t_list_a, &t_list_b, movs + 1));
+
+	movs = send_top_b(&t_list_a, &t_list_b);
+	printf("Movs: %i\n", movs);
+	sort_in_a_5(&t_list_a, &t_list_b, movs);
+	sort_in_a_5(&t_list_a, &t_list_b, send_remains(&t_list_a, &t_list_b, movs - 1));
+
+	movs = send_rest(&t_list_a, &t_list_b);
+	printf("Movs: %i\n", movs);
+	sort_in_a_5(&t_list_a, &t_list_b, movs);
+	sort_in_a_5(&t_list_a, &t_list_b, send_remains(&t_list_a, &t_list_b, movs + 1));
+
+	
+	printf("\n");
 	printf("List A: ");
 	printList(t_list_a);
+	printf("\n");
+	printf("\n");
 
-	printf("\n");
-	printf("Size a: %i\n", cnt_recursive(t_list_a));
-	printf("\n");
-	printf("\n");
 	printf("List B: ");
 	printList(t_list_b);
 	printf("\n");
-	printf("Size B: %i\n", cnt_recursive(t_list_b));
-	printf("\n");
 	printf("\n");
 	
-	printf("Result should be: ");
-	printf("\n");
-
-	sortList(&t_list_b);
-	printList(t_list_b);
-	printf("\n");
-
-	// sortList(&t_list_a);
-	// printList(t_list_a);
-	// printf("\n");
-
 	deallocate(&t_list_a, 0);
 	return (0);
 }

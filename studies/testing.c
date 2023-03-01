@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/19 17:56:30 by lliberal          #+#    #+#             */
-/*   Updated: 2023/01/30 11:17:18 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/03/01 18:53:54 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,40 @@ typedef struct s_node
 	int				x;
 	struct s_node	*next;
 }					t_node;
+
+void	insert_end(t_list **root, int value)
+{
+	t_list			*new_node;
+	static t_list	*end;
+
+	new_node = malloc(sizeof(t_list));
+	if (new_node == NULL)
+		return ;
+	new_node->x = value;
+	new_node->next = NULL;
+	if (*root == NULL)
+		*root = new_node;
+	else
+		end->next = new_node;
+	end = new_node;
+}
+
+void	printList(t_list *root)
+{
+	t_list	*curr;
+
+	curr = root;
+	while (curr != NULL)
+	{
+		if (curr->next == NULL)
+		{
+			printf("[*][%ld]", (long int)curr->x);
+			break ;
+		}
+		printf("[*][%ld]->", (long int)curr->x);
+		curr = curr->next;
+	}
+}
 
 void	insert_end(t_node **root, int value)
 {
