@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 17:24:21 by lliberal          #+#    #+#             */
-/*   Updated: 2023/03/01 19:47:53 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/03/02 16:57:40 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -614,7 +614,6 @@ int	find_smallest_chunks_in_a(t_list **root)
 	return (smallest);
 }
 
-
 void	sort_a(t_list **a, t_list **b, int n_moviments)
 {
 	t_list	*last;
@@ -651,49 +650,60 @@ void	sort_a(t_list **a, t_list **b, int n_moviments)
 		sort_a(a, b, pb_control);
 }
 
-void	send_bot_b(t_list **a, t_list **b)
+void	sort_back(t_list **a, t_list **b, int i, int n)
 {
-	t_list *temp;
-	t_list *last;
-	int	n;
-	int	i;
-	int	md_pnt;
+	sort_a(a, b, i);
+	i = n;
+	while (n-- != 0)
+		pa(a ,b);
+	sort_a(a, b, i);
+}
 
-	temp = *b;
-	last = *b;
+t_list	*find_last(t_list **b)
+{
+	t_list	*temp;
+	t_list	*last;
+	int		iterate;
+	int		n;
+	
+	temp = (*b);
+	last = (*b);
+	iterate = 0;
 	n = 0;
-	i = 0;
-	md_pnt = 0;
 	while (last->next != NULL)
 	{
 		last = last->next;
-		md_pnt++;
+		iterate++;
 		if (last->x > (*b)->x)
 			n++;
 		else
 			n = 0;
 	}
-	last = *b;
-	while (last->next != NULL && md_pnt-- >= n)
-		last = last->next;
-	md_pnt = md_chunk(b, bot_small(last), bot_big(last));
-	n = 0;
-	while (temp->x != last->x)
+	while (temp->next != NULL && iterate-- >= n)
+		temp = temp->next;
+	return (temp);
+}
+
+void	send_bot_b(t_list **a, t_list **b)
+{
+	t_mid	us;
+
+	usable->temp = *b;
+	usable->last = find_last(b);
+	usable->md_pnt = md_chunk(b, bot_small(usable->last), bot_big(usable->last));
+	usable->n = 0;
+	while (usable->temp->x != usable->last->x)
 	{
-		temp = *b;
-		while (temp->next != NULL)
-			temp = temp->next;
+		usable->temp = *b;
+		while (usable->temp->next != NULL)
+			usable->temp = usable->temp->next;
 		rrb(b);
-		if ((*b)->x >= md_pnt && ++i)
+		if ((*b)->x >= usable->md_pnt && ++usable->i)
 			pa(a, b);
 		else
-			n++;
+			usable->n++;
 	}
-	sort_a(a, b, i);
-	i = n;
-	while (n-- != 0)
-		pa(a, b);
-	sort_a(a, b, i);
+	sort_back(a, b, usable->i, usable->n);
 }
 
 void	send_top_b(t_list **a, t_list **b)
