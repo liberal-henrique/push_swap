@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 16:31:28 by lliberal          #+#    #+#             */
-/*   Updated: 2023/03/01 18:54:46 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/03/03 18:14:21 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (dest);
 }
 
-int	ft_atoi(const char *str)
+int		ft_atoi(const char *str)
 {
 	int		i;
 	int		sign;
@@ -82,19 +82,4 @@ int		list_sorted(t_list **root)
 		curr = curr->next;
 	}
 	return (1);
-}
-
-void	deallocate(t_list **root, int message)
-{
-	t_list	*temp;
-
-	while (*root)
-	{
-		temp = (*root)->next;
-		free(*root);
-		*root = temp;
-	}
-	*root = NULL;
-	if (message == 1)
-		exit(write(1, "errorDeallo\n", 12));
 }

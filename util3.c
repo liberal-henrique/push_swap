@@ -1,35 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_stack.c                                     :+:      :+:    :+:   */
+/*   util3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/18 17:56:40 by lliberal          #+#    #+#             */
-/*   Updated: 2023/03/03 18:27:42 by lliberal         ###   ########.fr       */
+/*   Created: 2023/03/03 17:41:11 by lliberal          #+#    #+#             */
+/*   Updated: 2023/03/03 18:27:05 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./push_swap.h"
 
-void	insert_end(t_list **root, int value)
+void	deallocate(t_list **root, int message)
 {
-	t_list	*new_node;
-	t_list	*curr;
+	t_list	*temp;
 
-	curr = *root;
-	new_node = malloc(sizeof(t_list));
-	if (new_node == NULL)
-		return ;
-	new_node->next = NULL;
-	new_node->x = value;
-	if (*root == NULL)
+	while (*root)
 	{
-		*root = new_node;
-		return ;
+		temp = (*root)->next;
+		free(*root);
+		*root = temp;
 	}
-	curr = *root;
-	while (curr->next != NULL)
-		curr = curr->next;
-	curr->next = new_node;
+	root = NULL;
+	if (message == 1)
+		exit (write(1, "errorDeallo\n", 12));
 }
