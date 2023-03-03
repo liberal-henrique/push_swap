@@ -6,7 +6,7 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 17:55:36 by lliberal          #+#    #+#             */
-/*   Updated: 2023/03/01 19:49:10 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/03/02 11:37:46 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ t_node	*ft_split_create_str(t_node *t_list_a, char *argv, char delimiter)
 	new_node = ft_split(argv, delimiter);
 	while (new_node[++i])
 		insert_end(&t_list_a, ft_atoi_check_numbers(new_node[i], t_list_a));
-	freeAll(new_node);
+	free_all(new_node);
 	return (t_list_a);
 }
 
@@ -218,24 +218,6 @@ void	insert_end(t_node **root, int value)
 	curr->next = new_node;
 }
 
-void	printList(t_node *root)
-{
-	t_node	*curr;
-
-	curr = root;
-	while (curr != NULL)
-	{
-		if (curr->next == NULL)
-		{
-			printf("[*][%ld]", (long int)curr->content);
-			printf("\n");
-			break ;
-		}
-		printf("[*][%ld]->", (long int)curr->content);
-		curr = curr->next;
-	}
-}
-
 void	deallocate(t_node **root, int message)
 {
 	t_node	*temp;
@@ -329,7 +311,7 @@ char	**ft_split(char const *s, char c)
 	return (res);
 }
 
-void	freeAll(char **result)
+void	free_all(char **result)
 {
 	int	i;
 

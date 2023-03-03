@@ -6,16 +6,11 @@
 /*   By: lliberal <lliberal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/09 11:32:24 by lliberal          #+#    #+#             */
-/*   Updated: 2023/03/01 18:52:39 by lliberal         ###   ########.fr       */
+/*   Updated: 2023/03/02 11:34:39 by lliberal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./push_swap.h"
-// #include <stdio.h>
-// #include <stdlib.h>
-// #include <string.h>
-// #include <unistd.h>
-
 
 void	sa(t_list **a)
 {
